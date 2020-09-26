@@ -13,6 +13,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('login');
+Route::get('/', 'PreController@index');
+Route::post('/', 'PreController@storeLogin');
+
+Route::get('/register', 'PreController@createRegister');
+Route::post('/register', 'PreController@storeRegister');
+
+Route::get('/confirmation', 'PreController@createConfirmation');
+
+
+
+
+/********************
+ *
+ * Grouping for all /advisor/* routes
+ *
+ ********************/
+Route::prefix('advisor')->group(function () {
+
 });

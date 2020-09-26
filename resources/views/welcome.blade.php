@@ -1,100 +1,82 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('master')
 
-        <title>Laravel</title>
+@section('content')
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+<STYLE>
+    .home-container {
+        display: flex;
+        justify-content: center;
+        padding-bottom: 30px;
+    }
+    .home-container div {
+        padding: 10px 30px;
+    }
+    .home-container div:first-child {
+        border-right: 1px solid gray;
+    }
+    hr {
+        margin-left: auto;
+        margin-right: auto;
+    }
 
-        <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        height: 20%;       
+    }
+    .center {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    h2 {
+        padding-left: 20px;
+    }
+    .td-container {
+        text-align: center;
+    }
+</STYLE>
 
-            .full-height {
-                height: 100vh;
-            }
+<H2 class="h2">Welcome to CSUDH Online Advising</H2>
+<HR>
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
+@if ($errors->any())
+	<DIV CLASS="error-notification">
+		Please fix the following errors to continue:
+		<ul>
+			@foreach ($errors->all() as $error)
+				<li>{{ $error }}</li>
+			@endforeach
+		</ul>
+	</DIV>
+@endif
 
-            .position-ref {
-                position: relative;
-            }
+<FORM ACTION="" METHOD="POST">
 
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
+<!-- Laravel's security out of the box -->
+{{ csrf_field() }}
 
-            .content {
-                text-align: center;
-            }
+    <DIV class="login-container">   
+        <TABLE CLASS="center">
+            <TR>
+                <TD ALIGN="right">EMAIL:</TD>
+                <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="50" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
+            </TR>
+            <TR>
+                <TD>PASSWORD:</TD>
+                <TD><INPUT TYPE="TEXT" NAME="Password" MAXLENGTH="20" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
+            </TR>
+            <TR>
+                <TD></TD>
+                <TD ALIGN="center"><BR><INPUT TYPE="SUBMIT" VALUE="LOGIN"></TD>
+            </TR>
+            <TR>
+                <TD></TD>
+                <TD CLASS="td-container"><BR><A HREF="./register">Don't have an account? Create one</A></TD>
+            </TR>
+        </TABLE>
+    </DIV>
+</FORM>
 
-            .title {
-                font-size: 84px;
-            }
+@endsection
 
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
-                </div>
-            </div>
-        </div>
-    </body>
-</html>
