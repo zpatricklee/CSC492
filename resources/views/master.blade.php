@@ -20,10 +20,32 @@
             align-items: flex-end;
         }
         .error-notification {
-            border: 1px outset red;
+            border: 3px outset red;
             color: red;
             padding: 10px;
             margin-bottom: 10px;
+            font-weight: bold;
+        }
+        hr {
+        margin-left: auto;
+        margin-right: auto;
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            height: 20%; 
+            border: 1px solid gray;   /*REMOVE THIS LATER*/
+        }
+        .center {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h2 {
+            padding-left: 20px;
+        }
+        .td-container {
+            text-align: center;
         }
     </STYLE>
     </HEAD>

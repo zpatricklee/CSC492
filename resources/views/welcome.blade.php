@@ -2,41 +2,6 @@
 
 @section('content')
 
-<STYLE>
-    .home-container {
-        display: flex;
-        justify-content: center;
-        padding-bottom: 30px;
-    }
-    .home-container div {
-        padding: 10px 30px;
-    }
-    .home-container div:first-child {
-        border-right: 1px solid gray;
-    }
-    hr {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .login-container {
-        display: flex;
-        justify-content: center;
-        align-items: center; 
-        height: 20%;       
-    }
-    .center {
-        margin-left: auto;
-        margin-right: auto;
-    }
-    h2 {
-        padding-left: 20px;
-    }
-    .td-container {
-        text-align: center;
-    }
-</STYLE>
-
 <H2 class="h2">Welcome to CSUDH Online Advising</H2>
 <HR>
 
@@ -59,12 +24,12 @@
     <DIV class="login-container">   
         <TABLE CLASS="center">
             <TR>
-                <TD ALIGN="right">EMAIL:</TD>
-                <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="50" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
+                <TD ALIGN="right">Email:</TD>
+                <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
             </TR>
             <TR>
-                <TD>PASSWORD:</TD>
-                <TD><INPUT TYPE="TEXT" NAME="Password" MAXLENGTH="20" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
+                <TD>Password:</TD>
+                <TD><INPUT TYPE="PASSWORD" NAME="Password" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
             </TR>
             <TR>
                 <TD></TD>

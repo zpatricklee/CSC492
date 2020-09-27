@@ -21,8 +21,7 @@ class PreController extends Controller
      * Description: Display welcome/login page (index)
      * 
      *****************/
-    public function index()
-    {
+    public function index(){
         return view('welcome');
     }
 
@@ -33,8 +32,7 @@ class PreController extends Controller
      * Description: Authenticate credentials and create a new record in Session table and use that record to persist their login
      * 
      *****************/
-    public function storeLogin()
-    {
+    public function storeLogin(){
         // Client-side validation
         request()->validate([
             'Email' => ['required', 'email'],
@@ -51,9 +49,18 @@ class PreController extends Controller
      * Description: Show the registration page where new users enter their basic information
      * 
      *****************/
-    public function createRegister()
-    {
+    public function createRegister(){
         return view('register');
     }
 
+    /*****************
+     * 
+     * Function:    createConfirmation
+     * 
+     * Description: Show the confirmation page that notifies the user that a verification link has been sent to their email
+     * 
+     *****************/
+    public function createConfirmation(){
+        return view('confirmation');
+    }
 }
