@@ -4,7 +4,11 @@
 
 <H2 class="h2">Welcome to CSUDH Online Advising</H2>
 <HR>
-
+@if (session('warning'))
+	<div class="alert alert-warning">
+		{!! session('warning') !!}
+	</div>
+@endif
 @if ($errors->any())
 	<DIV CLASS="error-notification">
 		Please fix the following errors to continue:

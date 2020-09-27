@@ -26,9 +26,9 @@ Route::get('/confirmation', 'PreController@createConfirmation');
 
 /********************
  *
- * Grouping for all /advisor/* routes
+ * Grouping for all /adviser/* routes
  *
  ********************/
-Route::prefix('advisor')->group(function () {
-
+Route::prefix('adviser')->group(function () {
+    Route::get('/home', 'AdviserController@createHome');
 });
