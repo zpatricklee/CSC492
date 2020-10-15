@@ -49,8 +49,19 @@
                 <TD ALIGN="right">Email:</TD>
                 <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>            
             </TR>
+            <TR>
+                <TD></TD>
+                <TD>
+                    @error('Email')
+                        <DIV CLASS="error-message">{{ $message }}</DIV>
+                    @enderror
+                </TD>
+            </TR>
         </TABLE>
     </DIV>
+
+    
+
     <DIV CLASS="register-container">
         <BR><BR><BR><BR><INPUT TYPE="SUBMIT" NAME="Register" VALUE="Send Confirmation Email">
     </DIV>

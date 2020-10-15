@@ -26,6 +26,9 @@
             margin-bottom: 10px;
             font-weight: bold;
         }
+        .error-message{
+            color: red;
+        }
         hr {
         margin-left: auto;
         margin-right: auto;

@@ -6,11 +6,13 @@ use DB;
 use App\Course;
 use App\UnverifiedAdviser;
 use App\VerifiedAdviser;
+use App\Mail\ConfirmationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use URL;
 
@@ -57,14 +59,28 @@ class PreController extends Controller
                 return redirect('/');   // Add warning message that says that email and password don't match
             }
         }
-
         // User was not found in VerifiedAdviser table, so now search VerifiedStudents
-        //$user = VerifiedStudent::where('EMAIL', request('Email'))->first();
+        else{
+            $user = VerifiedStudent::where('EMAIL', request('Email'))->first();
 
+            //dd($user->FIRST_NAME);
 
-        dd($user->FIRST_NAME);
-        
-        return view('student.home'); /* NEED TO REDIRECT TO ADVISER.HOME OR STUDENT.HOME DEPENDING ON ACCOUNT TYPE */
+            if(isset($user) && ! empty($user)){
+                // Email exists in the VerifiedStudents table, now check if password matches
+                if($user->TEMP_PW == request('Password')){
+                    // Need to create a record in session...
+                    
+                    // Send to student home page
+                    return redirect('/student/home');
+                }
+                else{
+                    // Email and password don't match
+                    return redirect('/');   // Add warning message that says that email and password don't match
+                }
+            }
+            
+            return view('welcome'); /* NEED TO REDIRECT TO ADVISER.HOME OR STUDENT.HOME DEPENDING ON ACCOUNT TYPE */
+        }
     }
 
     /*****************
@@ -76,6 +92,32 @@ class PreController extends Controller
      *****************/
     public function createRegister(){
         return view('register');
+    }
+
+    /*****************
+     * 
+     * Function:    storeRegister
+     * 
+     * Description: Create new unverified account and send verification email
+     * 
+     *****************/
+    public function storeRegister(){
+        request()->validate([
+            'Email' => 'required|email'
+        ]);
+
+        $email = request('Email');
+
+        Mail::raw('It works!', function($message){
+            $message->to(request('Email'))
+            ->subject('Hello There');
+        });
+
+        // Send verification email
+        //Mail::to(request('Email'))->send(new ConfirmationMail());
+
+        return redirect('/confirmation')
+            ->with($email);
     }
 
     /*****************
