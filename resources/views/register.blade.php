@@ -16,6 +16,21 @@
 
 <H2 class="h2">Register a new account</H2>
 <HR>
+@if (session('warning'))
+	<div class="alert alert-warning">
+		{!! session('warning') !!}
+	</div>
+@endif
+@if ($errors->any())
+	<DIV CLASS="error-notification">
+		Please fix the following errors to continue:
+		<ul>
+			@foreach ($errors->all() as $error)
+				<li>{{ $error }}</li>
+			@endforeach
+		</ul>
+	</DIV>
+@endif
 
 <FORM ACTION="" METHOD="POST">
 
@@ -48,14 +63,6 @@
             <TR>
                 <TD ALIGN="right">Email:</TD>
                 <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>            
-            </TR>
-            <TR>
-                <TD></TD>
-                <TD>
-                    @error('Email')
-                        <DIV CLASS="error-message">{{ $message }}</DIV>
-                    @enderror
-                </TD>
             </TR>
         </TABLE>
     </DIV>

@@ -103,7 +103,9 @@ class PreController extends Controller
      *****************/
     public function storeRegister(){
         request()->validate([
-            'Email' => 'required|email'
+            'FirstName' => ['required'],
+            'LastName' => ['required'],
+            'Email' => ['required', 'email']
         ]);
 
         $email = request('Email');
