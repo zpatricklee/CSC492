@@ -88,4 +88,8 @@ class PreController extends Controller
     public function createConfirmation(){
         return view('confirmation');
     }
+
+    public function testStudentHome(){
+        return view('student.home');
+    }
 }

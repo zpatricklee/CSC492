@@ -20,7 +20,7 @@ Route::get('/register', 'PreController@createRegister');
 Route::post('/register', 'PreController@storeRegister');
 
 Route::get('/confirmation', 'PreController@createConfirmation');
-
+Route::get('/student', 'PreController@testStudentHome');
 
 
 
