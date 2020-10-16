@@ -32,8 +32,8 @@
                 <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
             </TR>
             <TR>
-                <TD>Password:</TD>
-                <TD><INPUT TYPE="PASSWORD" NAME="Password" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
+                <TD><BR>Password:</TD>
+                <TD><BR><INPUT TYPE="PASSWORD" NAME="Password" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
             </TR>
             <TR>
                 <TD></TD>
@@ -41,7 +41,7 @@
             </TR>
             <TR>
                 <TD></TD>
-                <TD CLASS="td-container"><BR><A HREF="./register">Don't have an account? Create one</A></TD>
+                <TD CLASS="td-container"><BR><A HREF="./student/register">Don't have an account? Create one</A></TD>
             </TR>
         </TABLE>
     </DIV>

@@ -11,14 +11,17 @@ class ConfirmationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $entry;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($entry)
     {
         //
+        $this->entry = $entry;
     }
 
     /**
@@ -28,12 +31,8 @@ class ConfirmationMail extends Mailable
      */
     public function build()
     {
-        return $this->from('mail@example.com', 'Mailtrap')
-            ->subject('Mailtrap Confirmation')
-            ->markdown('emails.example')
-            ->with([
-                'name' => 'New Mailtrap User',
-                'link' => 'https://mailtrap.io/inboxes'
-            ]);
+        return $this->from('onlineadvising@csudh.edu', 'CSUDH Online Advising')
+                    ->subject('[CSUDH Online Advising] Please verify your email address')
+                    ->view('emails.confirmation');
     }
 }

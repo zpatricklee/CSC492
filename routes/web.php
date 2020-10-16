@@ -13,15 +13,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'PreController@index');
-Route::post('/', 'PreController@storeLogin');
+// Redirect root URL to /student
+Route::get('/', function(){
+    return redirect('student');
+});
 
-Route::get('/register', 'PreController@createRegister');
-Route::post('/register', 'PreController@storeRegister');
+/********************
+ *
+ * Grouping for all /student/* routes
+ *
+ ********************/
+Route::prefix('student')->group(function () {
+    Route::get('/home', 'StudentController@createHome');
 
-Route::get('/confirmation', 'PreController@createConfirmation');
+    Route::get('/', 'StudentController@index');
+    Route::post('/', 'StudentController@storeLogin');
 
+    Route::get('/register', 'StudentController@createRegister');
+    Route::post('/register', 'StudentController@storeRegister');
 
+    Route::get('/confirmation', 'StudentController@createConfirmation');
+
+    Route::get('/verify/{token}', 'StudentController@verifyEntry');
+});
 
 
 /********************

@@ -12,6 +12,7 @@ class VerifiedStudent extends Model
     // All fields in VerifiedStudent table are mass assignable
     protected $guarded = [];
 
-    const CREATED_AT = 'CREATED';
-    const UPDATED_AT = 'UPDATED';
+    public $timestamps = false; 
+    //const CREATED_AT = 'CREATED';
+    //const UPDATED_AT = 'UPDATED';
 }

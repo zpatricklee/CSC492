@@ -64,6 +64,10 @@
                 <TD ALIGN="right">Email:</TD>
                 <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>            
             </TR>
+            <TR>
+                <TD ALIGN="right"><BR>Password:</TD>
+                <TD><BR><INPUT TYPE="PASSWORD" NAME="Password" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
+            </TR>
         </TABLE>
     </DIV>
 
