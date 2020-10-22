@@ -148,7 +148,7 @@ class StudentController extends Controller
         // Send verification email
         Mail::to(request('Email'))->send(new ConfirmationMail($newEntry));
 
-        return redirect('/student/confirmation');
+        return view('/student/confirmation')->with('entry', $newEntry);
     }
 
     /*****************
@@ -158,7 +158,7 @@ class StudentController extends Controller
      * Description: Show the confirmation page that notifies the user that a verification link has been sent to their email
      * 
      *****************/
-    public function createConfirmation(){
+    public function createConfirmation($entry){
         return view('student.confirmation');
     }
 
