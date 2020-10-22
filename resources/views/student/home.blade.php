@@ -1,7 +1,6 @@
 @extends('master')
 
 @section('content')
-<!-- This File is curently in testing, will be updated to incorporate database sql table name = "class" --> 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
