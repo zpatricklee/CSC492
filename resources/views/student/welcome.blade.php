@@ -2,14 +2,15 @@
 
 @section('content')
 
-<H2 class="h2">Welcome to CSUDH Online Advising</H2>
+<H2 class="h2">STUDENTS | Welcome to CSUDH Online Advising</H2>
 <HR>
-@if (session('warning'))
+<!-- Error-Handling -->
+@if(session('warning'))
 	<div class="alert alert-warning">
 		{!! session('warning') !!}
 	</div>
 @endif
-@if ($errors->any())
+@if($errors->any())
 	<DIV CLASS="error-notification">
 		Please fix the following errors to continue:
 		<ul>
@@ -32,8 +33,8 @@
                 <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
             </TR>
             <TR>
-                <TD><BR>Password:</TD>
-                <TD><BR><INPUT TYPE="PASSWORD" NAME="Password" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
+                <TD>Password:</TD>
+                <TD><INPUT TYPE="PASSWORD" NAME="Password" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
             </TR>
             <TR>
                 <TD></TD>

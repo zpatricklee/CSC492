@@ -24,8 +24,6 @@ Route::get('/', function(){
  *
  ********************/
 Route::prefix('student')->group(function () {
-    Route::get('/home', 'StudentController@createHome');
-
     Route::get('/', 'StudentController@index');
     Route::post('/', 'StudentController@storeLogin');
 
@@ -35,6 +33,8 @@ Route::prefix('student')->group(function () {
     Route::get('/confirmation', 'StudentController@createConfirmation');
 
     Route::get('/verify/{token}', 'StudentController@verifyEntry');
+
+    Route::get('/home', 'StudentController@createHome');
 });
 
 
@@ -44,5 +44,15 @@ Route::prefix('student')->group(function () {
  *
  ********************/
 Route::prefix('adviser')->group(function () {
+    Route::get('/', 'AdviserController@index');
+    Route::post('/', 'AdviserController@storeLogin');
+
+    Route::get('/register', 'AdviserController@createRegister');
+    Route::post('/register', 'AdviserController@storeRegister');
+
+    Route::get('/confirmation', 'AdviserController@createConfirmation');
+
+    Route::get('/verify/{token}', 'AdviserController@verifyEntry');
+
     Route::get('/home', 'AdviserController@createHome');
 });

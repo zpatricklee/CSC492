@@ -2,20 +2,10 @@
 
 @section('content')
 
-<STYLE>
-    .register-info {
-        padding-left: 15px;
-        padding-top: 10px;
-    }
-    .register-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;  
-        }
-</STYLE>
-
-<H2 class="h2">Register a new account</H2>
+<H2 class="h2">STUDENTS | Register a new account</H2>
 <HR>
+
+<!-- Error-handling -->
 @if (session('warning'))
 	<div class="alert alert-warning">
 		{!! session('warning') !!}
@@ -65,16 +55,14 @@
                 <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>            
             </TR>
             <TR>
-                <TD ALIGN="right"><BR>Password:</TD>
-                <TD><BR><INPUT TYPE="PASSWORD" NAME="Password" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
+                <TD ALIGN="right"><br>Password:</TD>
+                <TD><br><INPUT TYPE="PASSWORD" NAME="Password" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>
             </TR>
+            <tr>
+                <td></td>
+                <td align="center"><br><input type="submit" name="Register" value="Send Confirmation Email"></td>
+            </tr>
         </TABLE>
-    </DIV>
-
-    
-
-    <DIV CLASS="register-container">
-        <BR><BR><BR><BR><INPUT TYPE="SUBMIT" NAME="Register" VALUE="Send Confirmation Email">
     </DIV>
 </FORM>
 

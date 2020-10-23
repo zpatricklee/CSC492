@@ -89,7 +89,7 @@ class StudentController extends Controller
      * 
      * Function:    createRegister
      * 
-     * Description: Show the registration page where new users enter their basic information
+     * Description: Show the registration page where new students enter their information
      * 
      *****************/
     public function createRegister(){
@@ -107,7 +107,8 @@ class StudentController extends Controller
         request()->validate([
             'FirstName' => ['required'],
             'LastName' => ['required'],
-            'Email' => ['required', 'email']
+            'Email' => ['required', 'email'],
+            'Password' => ['required']
         ]);
 
         // Check if an account already exists with the provided email
@@ -148,7 +149,7 @@ class StudentController extends Controller
         // Send verification email
         Mail::to(request('Email'))->send(new ConfirmationMail($newEntry));
 
-        return view('/student/confirmation')->with('entry', $newEntry);
+        return redirect('/student/confirmation');   //need to implement sessions to flash email to confirmation page
     }
 
     /*****************
@@ -158,7 +159,7 @@ class StudentController extends Controller
      * Description: Show the confirmation page that notifies the user that a verification link has been sent to their email
      * 
      *****************/
-    public function createConfirmation($entry){
+    public function createConfirmation(){
         return view('student.confirmation');
     }
 

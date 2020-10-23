@@ -61,6 +61,15 @@
             background-color: #fff3cd;
             border-color: #ffeeba;
         }
+        .register-info {
+            padding-left: 15px;
+            padding-top: 10px;
+        }
+        .register-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;  
+        }
     </STYLE>
     </HEAD>
 
