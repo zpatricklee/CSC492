@@ -99,6 +99,17 @@ class AdviserController extends Controller
 
     /*****************
      * 
+     * Function:    createConfirmation
+     * 
+     * Description: Show the confirmation page that notifies the user that a verification link has been sent to their email
+     * 
+     *****************/
+    public function createConfirmation(){
+        return view('adviser.confirmation');
+    }    
+
+    /*****************
+     * 
      * Function:    createHome
      * 
      * Description: Display home page
