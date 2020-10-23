@@ -22,6 +22,20 @@
 	</DIV>
 @endif
 
+<script type="text/javascript">
+    function onSelectChange(){
+        var sel = document.getElementById('Title');
+        var userStr = sel.options[sel.selectedIndex].text;
+
+        if(userStr == 'Other'){
+            document.getElementById('OtherTitle').disabled = false;
+        }
+        else{
+            document.getElementById('OtherTitle').disabled = true;
+        }
+    }
+</script>
+
 <FORM ACTION="" METHOD="POST">
 
 <!-- Laravel's security out of the box -->
@@ -34,12 +48,25 @@
     <DIV CLASS="register-container">
         <TABLE>
             <TR>
+                <td>
+                    <select name="Title" id="Title" onchange="onSelectChange()" style="background-color: #F5F5F5">
+                        <option></option>
+                        <option value="Mr.">Mr.</option>
+                        <option value="Mrs.">Mrs.</option>
+                        <option value="Ms.">Ms.</option>
+                        <option value="Dr.">Dr.</option>
+                        <option value="Prof.">Prof.</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <input type="text" name="OtherTitle" id="OtherTitle" disabled="disabled" maxlength="5" size="1"/>
+                </td>
                 <TD><INPUT TYPE="TEXT" NAME="FirstName" MAXLENGTH="20" SIZE="20" VALUE="" STYLE="background-color: #F5F5F5"></TD>
                 <TD><INPUT TYPE="TEXT" NAME="LastName" MAXLENGTH="20" SIZE="20" VALUE="" STYLE="background-color: #F5F5F5"></TD>
                 <TD><INPUT TYPE="TEXT" NAME="MI" MAXLENGTH="1" SIZE="1" VALUE="" STYLE="background-color: #F5F5F5"></TD>
                 <TD><INPUT TYPE="TEXT" NAME="Suffix" MAXLENGTH="5" SIZE="3" VALUE="" STYLE="background-color: #F5F5F5"></TD>
             </TR>
             <TR ALIGN="center">
+                <td align="left" style="padding-left: 15px">Title</td>
                 <TD>First Name</TD>
                 <TD>Last Name</TD>
                 <TD>M.I.</TD>

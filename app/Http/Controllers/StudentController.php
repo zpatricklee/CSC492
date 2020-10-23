@@ -132,6 +132,14 @@ class StudentController extends Controller
             $verificationToken = Str::random(40);
             $unverified_pw = request('Password');
 
+            // Check if 'Other' was selected for 'Title'
+            if(request('Title') == 'Other'){
+                $title = request('OtherTitle');
+            }
+            else{
+                $title = request('Title');
+            }
+
             $newEntry = UnverifiedStudent::create([
                 'TITLE' => request('Title'),
                 'FIRST_NAME' => request('FirstName'),
