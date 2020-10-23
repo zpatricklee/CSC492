@@ -6,6 +6,7 @@ use DB;
 use App\Course;
 use App\VerifiedAdviser;
 use App\UnverifiedAdviser;
+use App\Mail\AdviserConfirmationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -57,7 +58,10 @@ class AdviserController extends Controller
         ]);
 
         // Check if adviser account already exists with given email
+        $unverfiedExists = new UnverifiedAdviser;
         $unverifiedExists = UnverifiedAdviser::where('EMAIL', request('Email'))->first();
+        
+        $verifiedExists = new VerifiedAdviser;
         $verifiedExists = VerifiedAdviser::where('EMAIL', request('Email'))->first();
 
         // Enters "if" block if account with given email is found
@@ -86,8 +90,10 @@ class AdviserController extends Controller
                 'EMAIL' => request('Email'),
                 'DEPARTMENT' => request('Department'),
                 'OFFICE' => request('Office'),
+                'HASH_PW' => Hash::make(request('Password')),
                 'CREATED' => Carbon::now(),
-                'UPDATED' => Carbon::now()
+                'UPDATED' => Carbon::now(),
+                'VERIFICATION_TOKEN' => $verificationToken
             ]);
 
             // Send confirmation email
@@ -134,6 +140,7 @@ class AdviserController extends Controller
                     'EMAIL' => $unverified->EMAIL,
                     'DEPARTMENT' => $unverified->DEPARTMENT,
                     'OFFICE' => $unverified->OFFICE,
+                    'HASH_PW' => $unverified->HASH_PW,
                     'CREATED' => Carbon::now(),
                     'UPDATED' => Carbon::now()
                 ]);

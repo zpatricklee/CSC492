@@ -60,8 +60,8 @@
                     </select>
                     <input type="text" name="OtherTitle" id="OtherTitle" disabled="disabled" maxlength="5" size="1"/>
                 </td>
-                <td><input type="text" name="Firstname" maxlength="20" size="20" value="" style="background-color: #F5F5F5"></td>
-                <td><input type="text" name="Lastname" maxlength="20" size="20" value="" style="background-color: #F5F5F5"></td>
+                <td><input type="text" name="FirstName" maxlength="20" size="20" value="" style="background-color: #F5F5F5"></td>
+                <td><input type="text" name="LastName" maxlength="20" size="20" value="" style="background-color: #F5F5F5"></td>
                 <td><input type="text" name="MI" maxlength="1" size="1" value="" style="background-color: #F5F5F5"></td>
                 <td><input type="text" name="Suffix" maxlength="5" size="3" value="" style="background-color: #F5F5F5"></td>
             </tr>

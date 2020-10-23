@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UnverifiedAdvisor extends Model
+class UnverifiedAdviser extends Model
 {
     protected $table = 'unverified_adviser';
     protected $primaryKey = 'ID';

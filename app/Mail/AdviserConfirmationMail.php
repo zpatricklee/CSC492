@@ -11,6 +11,8 @@ class AdviserConfirmationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $entry;
+
     /**
      * Create a new message instance.
      *
@@ -19,7 +21,7 @@ class AdviserConfirmationMail extends Mailable
     public function __construct($entry)
     {
         //
-        $this->$entry = $entry;
+        $this->entry = $entry;
     }
 
     /**
