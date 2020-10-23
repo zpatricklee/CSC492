@@ -197,7 +197,7 @@ class StudentController extends Controller
             }
         }
         else{
-            return redirect('/')->with('warning', 'Sorry your email address cannot be identified. Please contact onlineadvising@csudh.edu');
+            return redirect('/')->with('warning', 'Sorry, your email address cannot be identified. Please contact onlineadvising@csudh.edu');
         }
 
         // NEED TO ADD SESSION 'STATUS' (right now, it doesn't do/display anything)

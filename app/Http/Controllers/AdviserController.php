@@ -106,7 +106,49 @@ class AdviserController extends Controller
      *****************/
     public function createConfirmation(){
         return view('adviser.confirmation');
-    }    
+    }
+
+    /*****************
+     * 
+     * Function:    verifyEntry
+     * 
+     * Description: Verify the entry's email address
+     * 
+     *****************/
+    public function verifyEntry($token){
+        $unverified = UnverifiedAdviser::where('VERIFICATION_TOKEN', $token)->first();
+
+        if(isset($unverified) && !empty($unverified)){
+            if(! $unverified->isVerified()){
+                $unverified->EMAIL_VERIFIED = Carbon::now();
+                $unverified->save();
+                $status = 'Your email address has been verified. You can now log in.';
+
+                // Create a VerifiedAdviser account
+                $verified = VerifiedAdviser::create([
+                    'TITLE' => $unverified->TITLE,
+                    'FIRST_NAME' => $unverified->FIRST_NAME,
+                    'MI' => $unverified->MI,
+                    'LAST_NAME' => $unverified->LAST_NAME,
+                    'SUFFIX' => $unverified->SUFFIX,
+                    'EMAIL' => $unverified->EMAIL,
+                    'DEPARTMENT' => $unverified->DEPARTMENT,
+                    'OFFICE' => $unverified->OFFICE,
+                    'CREATED' => Carbon::now(),
+                    'UPDATED' => Carbon::now()
+                ]);
+            }
+            else{
+                $status = 'Your email address is already verified. You can now log in.';
+            }
+        }
+        else{
+            return redirect('/adviser')->with('warning', 'Sorry, your email address cannot be identified. Please contact onlineadvising@csudh.edu');
+        }
+
+        // Redirect to login/welcome page
+        return redirect('/adviser')->with('status', $status);
+    }
 
     /*****************
      * 
