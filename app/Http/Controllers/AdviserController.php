@@ -92,6 +92,8 @@ class AdviserController extends Controller
 
             // Send confirmation email
             Mail::to(request('Email'))->send(new AdviserConfirmationMail($newEntry));
+
+            return redirect('/adviser/confirmation');
         }
     }   
 
