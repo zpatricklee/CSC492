@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use DB;
 use App\Course;
 use App\VerifiedAdviser;
+use App\UnverifiedAdviser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use URL;
 
@@ -53,6 +55,44 @@ class AdviserController extends Controller
             'Office' => ['required'],
             'Password' => ['required']
         ]);
+
+        // Check if adviser account already exists with given email
+        $unverifiedExists = UnverifiedAdviser::where('EMAIL', request('Email'))->first();
+        $verifiedExists = VerifiedAdviser::where('EMAIL', request('Email'))->first();
+
+        // Enters "if" block if account with given email is found
+        if((isset($unverifiedExists) && !empty($unverifiedExists)) || (isset($verifiedExists) && !empty($verifiedExists))){
+            $error = 'An account already exists with that email address.';
+            return redirect('/adviser/register')->withErrors($error);
+        }
+        // Otherwise, register new account with the given email
+        else{
+            $verificationToken = Str::random(40);
+
+            // Check if 'Other' was selected for 'Title'
+            if(request('Title') == 'Other'){
+                $title = request('OtherTitle');
+            }
+            else{
+                $title = request('Title');
+            }
+
+            $newEntry = UnverifiedAdviser::create([
+                'TITLE' => $title,
+                'FIRST_NAME' =>request('FirstName'),
+                'MI' => request('MI'),
+                'LAST_NAME' => request('LastName'),
+                'SUFFIX' => request('Suffix'),
+                'EMAIL' => request('Email'),
+                'DEPARTMENT' => request('Department'),
+                'OFFICE' => request('Office'),
+                'CREATED' => Carbon::now(),
+                'UPDATED' => Carbon::now()
+            ]);
+
+            // Send confirmation email
+            Mail::to(request('Email'))->send(new AdviserConfirmationMail($newEntry));
+        }
     }   
 
     /*****************

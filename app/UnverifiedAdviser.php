@@ -12,8 +12,9 @@ class UnverifiedAdvisor extends Model
     // All fields in UnverifiedAdviser table are mass assignable
     protected $guarded = [];
 
-    const CREATED_AT = 'CREATED';
-    const UPDATED_AT = 'UPDATED';
+    public $timestamps = false;
+    //const CREATED_AT = 'CREATED';
+    //const UPDATED_AT = 'UPDATED';
 
     // Useful helper method to quickly return if this user's email address has been verified or not
     public function isVerified()
