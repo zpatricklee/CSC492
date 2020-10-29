@@ -54,6 +54,10 @@
                 text-align: center;
                 width: 100%;
             }
+
+            option{
+                padding-left: 20px;
+            }
             
         </style>
     </head>
@@ -63,138 +67,63 @@
                 </div>
 
                 <div class="MainContent">
-                <h4>Next Semester courses</h4>
+                <h4> <center>Next Semester courses</center></h4>
 					<label for = "Course1">Course: </label>
-					<select name = "course1" id = "course1">
-						<option value = "CSC">Course option 1</option>
-						<option value = "CSC">CSC 121: Introduction to Computer Science and Programming I</option>
-						<option value = "CSC">CSC 123: Introduction to Computer Science and Programming II </option>
-						<option value = "CSC">CSC 221: Assembly Language and Introduction to Computer Organization</option>
-						<option value = "CSC">MAT 191: Calculus I</option>
-						<option value = "CSC">MAT 193: Calculus II</option>
-						<option value = "CSC">MAT 271: Foundations of Higher Mathematics</option>
-						<option value = "CSC">MAT 281: Discrete Mathematics</option>
-						<option value = "CSC">CSC 311. Data Structures</option>
-						<option value = "CSC">CSC 321. Programming Languages</option>
-						<option value = "CSC">CSC 331. Computer Organization</option>
-						<option value = "CSC">CSC 341. Operating Systems</option>
-						<option value = "CSC">CSC 395. Special Topics</option>
-						<option value = "CSC">CSC 401. Analysis of Algorithms</option>
-						<option value = "CSC">CSC 411. Artificial Intelligence</option>
-						<option value = "CSC">CSC 421. Advanced Programming Languages</option>
-						<option value = "CSC">CSC 431. Advanced Computer Organization</option>
-						<option value = "CSC">CSC 441. Advanced Operating Systems</option>
-						<option value = "CSC">CSC 451. Computer Networks</option>
-						<option value = "CSC">CSC 453. Data Management</option>
-						<option value = "CSC">CSC 455. World Wide Web Design and Management</option>
-						<option value = "CSC">CSC 459. Security Engineering</option>
-						<option value = "CSC">CSC 461. Computer Graphics I</option>
-						<option value = "CSC">CSC 463. Computer Graphics II</option>
-						<option value = "CSC">CSC 471. Compiler Construction</option>
-						<option value = "CSC">CSC 490. Senior Seminar</option>
-						<option value = "CSC">CSC 495. Special Topics</option>
-						<option value = "CSC">MAT 367. Numerical Analysis I</option>
-						<option value = "CSC">MAT 369. Numerical Analysis II</option>
+                    <?php
+                        $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
+                        $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
+                    ?>
+				    <select name="course_name1" >   
+                        <?php
+                            while($rows = $fetchCourse->fetch_assoc()){
+                                $COURSE_NAME = $rows['COURSE_NAME'];
+                                echo "<option value = '$COURSE_NAME' >$COURSE_NAME</option>";
+                            }
+                        ?>
+                    </select>
 					</select>
 					<br></br>
-					<label for = "Course1">Course: </label>
-					<select name = "course1" id = "course1">
-						<option value = "CSC">Course option 2</option>
-						<option value = "CSC">CSC 121: Introduction to Computer Science and Programming I</option>
-						<option value = "CSC">CSC 123: Introduction to Computer Science and Programming II </option>
-						<option value = "CSC">CSC 221: Assembly Language and Introduction to Computer Organization</option>
-						<option value = "CSC">MAT 191: Calculus I</option>
-						<option value = "CSC">MAT 193: Calculus II</option>
-						<option value = "CSC">MAT 271: Foundations of Higher Mathematics</option>
-						<option value = "CSC">MAT 281: Discrete Mathematics</option>
-						<option value = "CSC">CSC 311. Data Structures</option>
-						<option value = "CSC">CSC 321. Programming Languages</option>
-						<option value = "CSC">CSC 331. Computer Organization</option>
-						<option value = "CSC">CSC 341. Operating Systems</option>
-						<option value = "CSC">CSC 395. Special Topics</option>
-						<option value = "CSC">CSC 401. Analysis of Algorithms</option>
-						<option value = "CSC">CSC 411. Artificial Intelligence</option>
-						<option value = "CSC">CSC 421. Advanced Programming Languages</option>
-						<option value = "CSC">CSC 431. Advanced Computer Organization</option>
-						<option value = "CSC">CSC 441. Advanced Operating Systems</option>
-						<option value = "CSC">CSC 451. Computer Networks</option>
-						<option value = "CSC">CSC 453. Data Management</option>
-						<option value = "CSC">CSC 455. World Wide Web Design and Management</option>
-						<option value = "CSC">CSC 459. Security Engineering</option>
-						<option value = "CSC">CSC 461. Computer Graphics I</option>
-						<option value = "CSC">CSC 463. Computer Graphics II</option>
-						<option value = "CSC">CSC 471. Compiler Construction</option>
-						<option value = "CSC">CSC 490. Senior Seminar</option>
-						<option value = "CSC">CSC 495. Special Topics</option>
-						<option value = "CSC">MAT 367. Numerical Analysis I</option>
-						<option value = "CSC">MAT 369. Numerical Analysis II</option>
-					</select>
+					<label for = "Course2">Course: </label>
+					<?php
+                        $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
+                        $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
+                    ?>
+					<select name="course_name2">
+                        <?php
+                            while($rows = $fetchCourse->fetch_assoc()){
+                                $COURSE_NAME = $rows['COURSE_NAME'];
+                                echo "<option value = '$COURSE_NAME' >$COURSE_NAME</option>";
+                            }
+                        ?>
+                    </select>
 					<br></br>
-					<label for = "Course1">Course: </label>
-					<select name = "course1" id = "course1">
-						<option value = "CSC">Course option 3</option>
-						<option value = "CSC">CSC 121: Introduction to Computer Science and Programming I</option>
-						<option value = "CSC">CSC 123: Introduction to Computer Science and Programming II </option>
-						<option value = "CSC">CSC 221: Assembly Language and Introduction to Computer Organization</option>
-						<option value = "CSC">MAT 191: Calculus I</option>
-						<option value = "CSC">MAT 193: Calculus II</option>
-						<option value = "CSC">MAT 271: Foundations of Higher Mathematics</option>
-						<option value = "CSC">MAT 281: Discrete Mathematics</option>
-						<option value = "CSC">CSC 311. Data Structures</option>
-						<option value = "CSC">CSC 321. Programming Languages</option>
-						<option value = "CSC">CSC 331. Computer Organization</option>
-						<option value = "CSC">CSC 341. Operating Systems</option>
-						<option value = "CSC">CSC 395. Special Topics</option>
-						<option value = "CSC">CSC 401. Analysis of Algorithms</option>
-						<option value = "CSC">CSC 411. Artificial Intelligence</option>
-						<option value = "CSC">CSC 421. Advanced Programming Languages</option>
-						<option value = "CSC">CSC 431. Advanced Computer Organization</option>
-						<option value = "CSC">CSC 441. Advanced Operating Systems</option>
-						<option value = "CSC">CSC 451. Computer Networks</option>
-						<option value = "CSC">CSC 453. Data Management</option>
-						<option value = "CSC">CSC 455. World Wide Web Design and Management</option>
-						<option value = "CSC">CSC 459. Security Engineering</option>
-						<option value = "CSC">CSC 461. Computer Graphics I</option>
-						<option value = "CSC">CSC 463. Computer Graphics II</option>
-						<option value = "CSC">CSC 471. Compiler Construction</option>
-						<option value = "CSC">CSC 490. Senior Seminar</option>
-						<option value = "CSC">CSC 495. Special Topics</option>
-						<option value = "CSC">MAT 367. Numerical Analysis I</option>
-						<option value = "CSC">MAT 369. Numerical Analysis II</option>
-					</select>
+					<label for = "Course3">Course: </label>
+					<?php
+                        $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
+                        $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
+                    ?>
+					<select name="course_name3">
+                        <?php
+                            while($rows = $fetchCourse->fetch_assoc()){
+                                $COURSE_NAME = $rows['COURSE_NAME'];
+                                echo "<option value = '$COURSE_NAME' >$COURSE_NAME</option>";
+                            }
+                        ?>
+                    </select>
 					<br></br>
-					<label for = "Course1">Course: </label>
-					<select name = "course1" id = "course1">
-						<option value = "CSC">Course option 4</option>
-						<option value = "CSC">CSC 121: Introduction to Computer Science and Programming I</option>
-						<option value = "CSC">CSC 123: Introduction to Computer Science and Programming II </option>
-						<option value = "CSC">CSC 221: Assembly Language and Introduction to Computer Organization</option>
-						<option value = "CSC">MAT 191: Calculus I</option>
-						<option value = "CSC">MAT 193: Calculus II</option>
-						<option value = "CSC">MAT 271: Foundations of Higher Mathematics</option>
-						<option value = "CSC">MAT 281: Discrete Mathematics</option>
-						<option value = "CSC">CSC 311: Data Structures</option>
-						<option value = "CSC">CSC 321: Programming Languages</option>
-						<option value = "CSC">CSC 331: Computer Organization</option>
-						<option value = "CSC">CSC 341: Operating Systems</option>
-						<option value = "CSC">CSC 395: Special Topics</option>
-						<option value = "CSC">CSC 401: Analysis of Algorithms</option>
-						<option value = "CSC">CSC 411: Artificial Intelligence</option>
-						<option value = "CSC">CSC 421: Advanced Programming Languages</option>
-						<option value = "CSC">CSC 431: Advanced Computer Organization</option>
-						<option value = "CSC">CSC 441: Advanced Operating Systems</option>
-						<option value = "CSC">CSC 451: Computer Networks</option>
-						<option value = "CSC">CSC 453: Data Management</option>
-						<option value = "CSC">CSC 455: World Wide Web Design and Management</option>
-						<option value = "CSC">CSC 459: Security Engineering</option>
-						<option value = "CSC">CSC 461: Computer Graphics I</option>
-						<option value = "CSC">CSC 463: Computer Graphics II</option>
-						<option value = "CSC">CSC 471: Compiler Construction</option>
-						<option value = "CSC">CSC 490: Senior Seminar</option>
-						<option value = "CSC">CSC 495: Special Topics</option>
-						<option value = "CSC">MAT 367: Numerical Analysis I</option>
-						<option value = "CSC">MAT 369: Numerical Analysis II</option>
-					</select>
+					<label for = "Course4">Course: </label>
+					<?php
+                        $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
+                        $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
+                    ?>
+					<select name="course_name4">
+                        <?php
+                            while($rows = $fetchCourse->fetch_assoc()){
+                                $COURSE_NAME = $rows['COURSE_NAME'];
+                                echo "<option value = '$COURSE_NAME' >$COURSE_NAME</option>";
+                            }
+                        ?>
+                    </select>
 					<br></br>
 					<button type="submit">Submit</button>
                 </div>
@@ -206,37 +135,17 @@
 
                 <div class="Courses">
                     <h4>Courses</h4>
+                        <?php
+                            $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db'); 
+                            $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course"); //Here we select the table we want to pull from
+                        ?>
                         <ul style ="list-style-type:none;">
-                            <li>CSC 121: Introduction to Computer Science and Programming I</li>
-                            <li>CSC 121: Introduction to Computer Science and Programming II</li>
-                            <li>CSC 221: Assembly Language and Introduction to Computer Organization</li>                 
-						    <li>CSC 221: Assembly Language and Introduction to Computer Organization</li>
-                            <li>MAT 191: Calculus I</li>
-                            <li>MAT 193: Calculus II</li>
-                            <li>MAT 271: Foundations of Higher Mathematics</li>
-                            <li>MAT 281: Discrete Mathematics</li>
-                            <li>CSC 311: Data Structures</li>
-                            <li>CSC 321: Programming Languages</li>
-                            <li>CSC 331: Computer Organization</li>
-						    <li>CSC 341: Operating Systems</li>
-						    <li>CSC 395: Special Topics</li>
-                            <li>CSC 401: Analysis of Algorithms</li>
-                            <li>CSC 411: Artificial Intelligence</li>
-                            <li>CSC 421: Advanced Programming Languages</li>
-                            <li>CSC 431: Advanced Computer Organization</li>
-                            <li>CSC 441: Advanced Operating Systems</li>
-                            <li>CSC 451: Computer Networks</li>
-                            <li>CSC 453: Data Management</li>
-                            <li>CSC 455: World Wide Web Design and Management</li>
-                            <li>CSC 459: Security Engineering</li>
-                            <li>CSC 461: Computer Graphics I</li>
-                            <li>CSC 463: Computer Graphics II</li>
-                            <li>CSC 471: Compiler Construction</li>
-                            <li>CSC 490: Senior Seminar</li>
-                            <li>CSC 495: Special Topics</li>
-                            <li>MAT 367: Numerical Analysis I</li>
-                            <li>MAT 369: Numerical Analysis II</li>
-                        </ul>
+                            <?php
+                                while($rows = $fetchCourse->fetch_assoc()){
+                                    $COURSE_NAME = $rows['COURSE_NAME'];
+                                echo "<li value = '$COURSE_NAME' >$COURSE_NAME</li>";
+                                }
+                            ?>
                 </div>
 
                 <div class="CompletedCourse">
