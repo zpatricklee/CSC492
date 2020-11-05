@@ -1,4 +1,4 @@
-@extends('master')
+@extends('adviser_master')
 
 @section('content')
 
