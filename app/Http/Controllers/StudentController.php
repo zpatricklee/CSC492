@@ -8,6 +8,7 @@ use App\UnverifiedAdviser;
 use App\VerifiedAdviser;
 use App\UnverifiedStudent;
 use App\VerifiedStudent;
+use App\S_Session;
 use App\Mail\ConfirmationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -51,38 +52,55 @@ class StudentController extends Controller
         if(isset($user) && ! empty($user)){
             // Email exists in the VerifiedStudent table, now check if password matches
             if(Hash::check(request('Password'), $user->HASH_PW)){
-                // Need to create a record in session...
+                // Create a record in S_Session and login user
+                $session = new S_Session;
+                $session->student_id = $user->STUDENT_ID;
+                $session->title = $user->TITLE;
+                $session->first_name = $user->FIRST_NAME;
+                $session->mi = $user->MI;
+                $session->last_name = $user->LAST_NAME;
+                $session->suffix = $user->SUFFIX;
+                $session->email = $user->EMAIL;
+                $session->session_date = Carbon::today()->toDateString();               
+                $session->save();
+                Auth::guard('student')->login($session);
                 
+                // dd($session);
+
                 // Send to student home page
                 return redirect('/student/home');
             }
             else{
                 // Email and password don't match
-                return redirect('/student')->withErrors('Email and password do not match');
+                return redirect('/student')->withErrors('Email and password do not match.');
             }
         }
-        // User was not found in VerifiedAdviser table, so now search VerifiedStudents
-        else{
-            $user = VerifiedStudent::where('EMAIL', request('Email'))->first();
+        // User was not found in VerifiedStudent table, so redirect to welcome page
+        else{            
+            $user = UnverifiedStudent::where('EMAIL', request('Email'))->first();
 
-            //dd($user->FIRST_NAME);
-
+            // Check if email exists in UnverfiedStudent table
             if(isset($user) && ! empty($user)){
-                // Email exists in the VerifiedStudents table, now check if password matches
-                if($user->TEMP_PW == request('Password')){
-                    // Need to create a record in session...
-                    
-                    // Send to student home page
-                    return redirect('/student/home');
-                }
-                else{
-                    // Email and password don't match
-                    return redirect('/');   // Add warning message that says that email and password don't match
-                }
+                return redirect('/student')->withErrors('An unverified account with that email exists in our records. Please check your inbox for a confirmation email or request that we resend the confirmation email.');
             }
-            
-            return view('student.welcome'); /* NEED TO REDIRECT TO ADVISER.HOME OR STUDENT.HOME DEPENDING ON ACCOUNT TYPE */
+            // User does not exist in UnverfiedStudent table
+            else{
+                return redirect('student')->withErrors('An account with that email does not exist. Please create a new account if you wish to proceed.');
+            }
         }
+    }
+
+    /*****************
+     * 
+     * Function:    logout
+     * 
+     * Description: Logout
+     * 
+     *****************/
+    public function logout(){
+        Auth::guard('student')->logout();
+
+        return redirect('/student');
     }
 
     /*****************
@@ -157,7 +175,9 @@ class StudentController extends Controller
         // Send verification email
         Mail::to(request('Email'))->send(new ConfirmationMail($newEntry));
 
-        return redirect('/student/confirmation');   //need to implement sessions to flash email to confirmation page
+        return redirect('/student/confirmation')->with([
+            'email' => request('Email')
+        ]);
     }
 
     /*****************
@@ -168,6 +188,7 @@ class StudentController extends Controller
      * 
      *****************/
     public function createConfirmation(){
+
         return view('student.confirmation');
     }
 
@@ -222,4 +243,6 @@ class StudentController extends Controller
     public function createHome(){
         return view('student.home');
     }
+
+
 }

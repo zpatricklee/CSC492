@@ -46,6 +46,18 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'student' => [
+            'driver' => 'session',
+            'provider' => 'students',
+            'hash' => false,
+        ],
+
+        'adviser' => [
+            'driver' => 'session',
+            'provider' => 'advisers',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -66,15 +78,17 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        // Student users
+        'students' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\S_Session::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        // Adviser users
+        'advisers' => [
+            'driver' => 'eloquent',
+            'model' => App\A_Session::class,
+        ]
     ],
 
     /*
