@@ -3,6 +3,9 @@
     <HEAD>
             <TITLE>CSUDH ONLINE ADVISING</TITLE>
     <STYLE>
+        a {
+            text-decoration: none;
+        }
         html, body{
             height: 100%
         }
@@ -70,11 +73,14 @@
             justify-content: center;
             align-items: center;  
         }
+        .link-visited {
+            color: rgb(239, 186, 8);
+        }
     </STYLE>
     </HEAD>
 
     <BODY>
-        <H1 CLASS="header-container">ONLINE ADVISING</H1>
+        <H1 CLASS="header-container"><a href="./" class="link-visited">ONLINE ADVISING</a></H1>
         
         @yield('content')
 

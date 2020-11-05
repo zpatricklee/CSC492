@@ -29,7 +29,12 @@ class StudentController extends Controller
      * 
      *****************/
     public function index(){
-        return view('student.welcome');
+        $user = Auth::guard('student')->user();
+        
+        if(isset($user)){
+            return redirect('/student/home');
+        }
+        else return view('student.welcome');
     }
 
     /*****************
