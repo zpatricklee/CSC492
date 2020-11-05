@@ -6,6 +6,7 @@ use DB;
 use App\Course;
 use App\VerifiedAdviser;
 use App\UnverifiedAdviser;
+use App\A_Session;
 use App\Mail\AdviserConfirmationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -26,7 +27,70 @@ class AdviserController extends Controller
      * 
      *****************/
     public function index(){
-        return view('adviser.welcome');
+        // Check if user is already logged in
+        $user = Auth::guard('adviser')->user();
+
+        // If so, redirect to adviser home page
+        if(isset($user)){
+            return redirect('/adviser/home');
+        }
+        else return view('adviser.welcome');
+    }
+
+    /*****************
+     * 
+     * Function:    storeLogin
+     * 
+     * Description: Authenticate credentials and create a new record in Session table and use that record to persist their login
+     * 
+     *****************/
+    public function storeLogin(){
+        // Client-side validation
+        request()->validate([
+            'Email' => ['required', 'email'],
+            'Password' => ['required']
+        ]);
+
+        // Check if user exists(verified)
+        $user = VerifiedAdviser::where('EMAIL', request('Email'))->first();
+        
+        if(isset($user) && ! empty($user)){
+            // Email exists in VerifiedAdviser, now check password
+            if(Hash::check(request('Password'), $user->HASH_PW)){
+                // Create a new session in A_Session and login user
+                $session = new A_Session;
+                $session->adviser_id = $user->ADVISER_ID;
+                $session->title = $user->TITLE;
+                $session->first_name = $user->FIRST_NAME;
+                $session->mi = $user->MI;
+                $session->last_name = $user->LAST_NAME;
+                $session->suffix = $user->SUFFIX;
+                $session->email = $user->EMAIL;
+                $session->session_date = Carbon::today()->toDateString();               
+                $session->save();
+                Auth::guard('adviser')->login($session);
+
+                // Send to adviser home page
+                return redirect('/adviser/home');
+            }
+            // Password does not match
+            else{
+                return redirect('/adviser')->withErrors('Email and password do not match.');
+            }
+        }
+        // Email does not exist in VerifiedAdviser table. Check UnverifiedAdviser table
+        else{
+            $user = UnverifiedAdviser::where('EMAIL', request('Email'))->first();
+
+            // Check if email exists in UnverifiedAdviser table
+            if(isset($user) && ! empty($user)){
+                return redirect('/adviser')->withErrors('An unverified account with that email exists in our records. Please check your inbox for a confirmation email or request that we resend the confirmation email.');                
+            }
+            // User does not exist in UnverifiedAdviser table
+            else{
+                return redirect('/adviser')->withErrors('An account with that email does not exist. Please create a new account if you wish to proceed.');
+            }
+        }
     }
 
     /*****************
@@ -105,62 +169,6 @@ class AdviserController extends Controller
 
     /*****************
      * 
-     * Function:    storeLogin
-     * 
-     * Description: Authenticate credentials and create a new record in Session table and use that record to persist their login
-     * 
-     *****************/
-    public function storeLogin(){
-        // Client-side validation
-        request()->validate([
-            'Email' => ['required', 'email'],
-            'Password' => ['required']
-        ]);
-
-        // Check if user exists(verified)
-        $user = VerifiedAdviser::where('EMAIL', request('Email'))->first();
-        
-        if(isset($user) && ! empty($user)){
-            // Email exists in VerifiedAdviser, now check password
-            if(Hash::check(request('Password'), $user->HASH_PW)){
-                // Create a new session in A_Session and login user
-                $session = new A_Session;
-                $session->adviser_id = $user->ADVISER_ID;
-                $session->title = $user->TITLE;
-                $session->first_name = $user->FIRST_NAME;
-                $session->mi = $user->MI;
-                $session->last_name = $user->LAST_NAME;
-                $session->suffix = $user->SUFFIX;
-                $session->email = $user->EMAIL;
-                $session->session_date = Carbon::today()->toDateString();               
-                $session->save();
-                Auth::guard('adviser')->login($session);
-
-                // Send to adviser home page
-                return redirect('/adviser/home');
-            }
-            // Password does not match
-            else{
-                return redirect('/adviser')->withErrors('Email and password do not match.');
-            }
-        }
-        // Email does not exist in VerifiedAdviser table. Check UnverifiedAdviser table
-        else{
-            $user = UnverifiedAdviser::where('EMAIL', request('Email'))->first();
-
-            // Check if email exists in UnverifiedAdviser table
-            if(isset($user) && ! empty($user)){
-                return redirect('/adviser')->withErrors('An unverified account with that email exists in our records. Please check your inbox for a confirmation email or request that we resend the confirmation email.');                
-            }
-            // User does not exist in UnverifiedAdviser table
-            else{
-                return redirect('/adviser')->withErrors('An account with that email does not exist. Please create a new account if you wish to proceed.');
-            }
-        }
-    }
-
-    /*****************
-     * 
      * Function:    logout
      * 
      * Description: Logout
@@ -191,6 +199,9 @@ class AdviserController extends Controller
      * 
      *****************/
     public function verifyEntry($token){
+        // Logout any users that happen to be logged in
+        Auth::guard('adviser')->logout();
+
         $unverified = UnverifiedAdviser::where('VERIFICATION_TOKEN', $token)->first();
 
         if(isset($unverified) && !empty($unverified)){
