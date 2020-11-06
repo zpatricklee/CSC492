@@ -19,8 +19,20 @@
 
             .Topbar {
                 font-size: 84px;
-                margin: 10;
+                text-indent: 1%;
                 width: 100%;
+                text-align: center;
+                float: left;
+                border-style: solid;
+            }
+
+            .logout {
+                margin: auto;
+                font-size: 20px;
+                width: 7%;
+                font-weight: bold;
+                float: right;
+                border-style: solid;
             }
             
             .MainContent {
@@ -63,7 +75,10 @@
     </head>
     <body>
                 <div class="TopBar">
-                    <center>Welcome Student</center>
+                        Welcome Student
+                    <div class="logout">
+                        <A HREF="./logout"  STYLE="color: #800000">LOG OUT</A>
+                    </div>
                 </div>
 
                 <div class="MainContent">
@@ -127,7 +142,6 @@
 					<br></br>
 					<button type="submit">Submit</button>
                 </div>
-                </div>
 
                 <div class="AdvisorNotes">
                     <h4>AdvisorNotes</h4>
@@ -139,7 +153,7 @@
                             $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db'); 
                             $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course"); //Here we select the table we want to pull from
                         ?>
-                        <ul style ="list-style-type:none;">
+                        <ul style ="list-style-type:none; margin:0; padding:0">
                             <?php
                                 while($rows = $fetchCourse->fetch_assoc()){
                                     $COURSE_NAME = $rows['COURSE_NAME'];
@@ -182,9 +196,5 @@
 						MAT 367: Numerical Analysis I
 						MAT 369: Numerical Analysis II
 -->
-
-
-
-<A HREF="./logout" STYLE="color: #800000">LOG OUT</A>
 
 @endsection
