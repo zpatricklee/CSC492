@@ -17,23 +17,9 @@
                 margin: 0;
             }
 
-            .Topbar {
-                font-size: 84px;
-                text-indent: 1%;
-                width: 100%;
-                text-align: center;
-                float: left;
-                border-style: solid;
-            }
 
-            .logout {
-                margin: auto;
-                font-size: 20px;
-                width: 7%;
-                font-weight: bold;
-                float: right;
-                border-style: solid;
-            }
+
+            
             
             .MainContent {
                 font-size: 25px;

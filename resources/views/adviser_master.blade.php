@@ -76,6 +76,14 @@
         .link-visited {
             color: rgb(239, 186, 8);
         }
+        .logout {
+            margin: auto;
+            font-size: 20px;
+            width: 7%;
+            font-weight: bold;
+            float: right;
+            border-style: solid;
+        }
     </STYLE>
     </HEAD>
 

@@ -76,6 +76,22 @@
         .link-visited {
             color: rgb(239, 186, 8);
         }
+        .logout {
+            margin: auto;
+            font-size: 20px;
+            width: 7%;
+            font-weight: bold;
+            float: right;
+            border-style: solid;
+        }
+
+        .Topbar {
+            font-size: 84px;
+            text-indent: 7%;
+            width: 100%;
+            text-align: center;
+            border-style: solid;
+        }
     </STYLE>
     </HEAD>
 
