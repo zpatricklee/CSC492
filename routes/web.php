@@ -57,6 +57,9 @@ Route::prefix('adviser')->group(function () {
     Route::get('/verify/{token}', 'AdviserController@verifyEntry');
 
     Route::get('/home', 'AdviserController@createHome')->middleware(['auth:adviser']);
+    Route::post('/home', 'AdviserController@storeHome')->middleware(['auth:adviser']);
+
+    Route::get('/viewStudent', 'AdviserController@createViewStudent')->middleware(['auth:adviser']);
 
     Route::get('/logout', 'AdviserController@logout');
 });

@@ -17,10 +17,6 @@
                 margin: 0;
             }
 
-
-
-            
-            
             .MainContent {
                 font-size: 25px;
                 font-family: 'Nunito', sans-serif;

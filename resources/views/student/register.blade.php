@@ -77,9 +77,13 @@
     <BR>
     <DIV CLASS="register-container">
         <TABLE>
+            <tr>
+                <td align="right">Student ID:</td>
+                <td><input type="text" name="StudentID" maxlength="9" size="30" value="" style="background-color: #F5F5F5"></td>
+            </tr>
             <TR>
-                <TD ALIGN="right">Email:</TD>
-                <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>            
+                <TD ALIGN="right"><br>Email:</TD>
+                <TD><br><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>            
             </TR>
             <TR>
                 <TD ALIGN="right"><br>Password:</TD>

@@ -130,6 +130,7 @@ class StudentController extends Controller
         request()->validate([
             'FirstName' => ['required'],
             'LastName' => ['required'],
+            'StudentID' => ['required', 'digits:9'],
             'Email' => ['required', 'email'],
             'Password' => ['required']
         ]);
@@ -169,6 +170,7 @@ class StudentController extends Controller
                 'MI' => request('MI'),
                 'LAST_NAME' => request('LastName'),
                 'SUFFIX' => request('Suffix'),
+                'SID' => request('StudentID'),
                 'EMAIL' => request('Email'),
                 'HASH_PW' => Hash::make($unverified_pw),
                 'CREATED' => Carbon::now(),
@@ -220,6 +222,7 @@ class StudentController extends Controller
                     'MI' => $unverified->MI,
                     'LAST_NAME' => $unverified->LAST_NAME,
                     'SUFFIX' => $unverified->SUFFIX,
+                    'SID' => $unverified->SID,
                     'EMAIL' => $unverified->EMAIL,
                     'HASH_PW' => $unverified->HASH_PW,
                     'CREATED' => Carbon::now(),

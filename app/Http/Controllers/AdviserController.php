@@ -6,6 +6,7 @@ use DB;
 use App\Course;
 use App\VerifiedAdviser;
 use App\UnverifiedAdviser;
+use App\VerifiedStudent;
 use App\A_Session;
 use App\Mail\AdviserConfirmationMail;
 use Illuminate\Http\Request;
@@ -248,5 +249,49 @@ class AdviserController extends Controller
      *****************/
     public function createHome(){
         return view('adviser.home');
+    }
+
+    /*****************
+     * 
+     * Function:    storeHome
+     * 
+     * Description: Get Student ID from adviser and check if it is valid
+     * 
+     *****************/
+    public function storeHome(){
+        request()->validate([
+            'StudentID' => ['required', 'digits:9']
+        ]);
+
+        $user = Auth::guard('adviser')->user();
+
+        $student = VerifiedStudent::where('SID', request('StudentID'))->first();
+
+        //dd($student);
+
+        // Check if student with given Student ID exists in VerifiedStudent table
+        if(isset($student) && ! empty($student)){
+            // Store Student ID in SID_REQUEST
+            $user->SID_REQUEST = request('StudentID');
+            $user->save();
+
+            return redirect('/adviser/viewStudent');
+        }
+        else{
+            return redirect('/adviser/home')->with('message', 'Either a student with that Student ID does not exist, or that student has not yet created a verified account.');
+        }
+    }
+
+    /*****************
+     * 
+     * Function:    createViewStudent
+     * 
+     * Description: Show student info
+     * 
+     *****************/
+    public function createViewStudent(){
+        $user = Auth::guard('adviser')->user();
+
+        return view('adviser.viewStudent')->with('user', $user);
     }
 }
