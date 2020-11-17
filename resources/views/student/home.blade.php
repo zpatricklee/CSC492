@@ -65,18 +65,20 @@
 
                 <div class="MainContent">
                 <h4> <center>Next Semester courses</center></h4>
+                <form action="/resources/views/student/action_page.php" method="post">
 					<label for = "Course1">Course: </label>
                     <?php
                         $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
                         $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
                     ?>
-				    <select name="course_name1" >   
+				    <select name="course_name1" >
+                        <option></option>  
                         <?php
                             while($rows = $fetchCourse->fetch_assoc()){
-                                $COURSE_NAME = $rows['COURSE_NAME'];
-                                echo "<option value = '$COURSE_NAME' >$COURSE_NAME</option>";
+                                $COURSE_NAME1 = $rows['COURSE_NAME'];
+                                echo "<option value = '$COURSE_NAME1' >$COURSE_NAME1</option>";
                             }
-                        ?>
+                        ?> 
                     </select>
 					</select>
 					<br></br>
@@ -85,25 +87,27 @@
                         $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
                         $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
                     ?>
-					<select name="course_name2">
+					<select name="course_name2">.
+                        <option></option>
                         <?php
                             while($rows = $fetchCourse->fetch_assoc()){
-                                $COURSE_NAME = $rows['COURSE_NAME'];
-                                echo "<option value = '$COURSE_NAME' >$COURSE_NAME</option>";
+                                $COURSE_NAME2 = $rows['COURSE_NAME'];
+                                echo "<option value = '$COURSE_NAME2' >$COURSE_NAME2</option>";
                             }
                         ?>
                     </select>
 					<br></br>
-					<label for = "Course3">Course: </label>
+					<label for = "Course3">Course: </label> 
 					<?php
                         $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
                         $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
                     ?>
 					<select name="course_name3">
+                        <option></option>
                         <?php
                             while($rows = $fetchCourse->fetch_assoc()){
-                                $COURSE_NAME = $rows['COURSE_NAME'];
-                                echo "<option value = '$COURSE_NAME' >$COURSE_NAME</option>";
+                                $COURSE_NAME3 = $rows['COURSE_NAME'];
+                                echo "<option value = '$COURSE_NAME3' >$COURSE_NAME3</option>";
                             }
                         ?>
                     </select>
@@ -114,15 +118,18 @@
                         $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
                     ?>
 					<select name="course_name4">
+                        <option></option>
                         <?php
                             while($rows = $fetchCourse->fetch_assoc()){
-                                $COURSE_NAME = $rows['COURSE_NAME'];
-                                echo "<option value = '$COURSE_NAME' >$COURSE_NAME</option>";
+                                $COURSE_NAME4 = $rows['COURSE_NAME'];
+                                echo "<option value = '$COURSE_NAME4' >$COURSE_NAME4</option>";
                             }
                         ?>
                     </select>
 					<br></br>
-					<button type="submit">Submit</button>
+					<input type="submit" value="Submit">
+                    </form>
+                </div>
                 </div>
 
                 <div class="AdvisorNotes">
