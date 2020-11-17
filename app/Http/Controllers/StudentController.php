@@ -34,7 +34,9 @@ class StudentController extends Controller
         if(isset($user)){
             return redirect('/student/home');
         }
-        else return view('student.welcome');
+        else{
+            return view('student.welcome');
+        }
     }
 
     /*****************
@@ -142,9 +144,6 @@ class StudentController extends Controller
         $verified_exists = new VerifiedStudent;
         $verified_exists = VerifiedStudent::where('EMAIL', request('Email'))->first();
 
-        //dd($unverified_exists);
-        //dd($verified_exists);
-
         // $unverified_exists and/or $verified_exists is null if email is NOT found in their respective tables
         if((isset($unverified_exists) && !empty($unverified_exists)) || (isset($verified_exists) && !empty($verified_exists))){
             // Then, do NOT create a new account, and display an error message
@@ -165,7 +164,7 @@ class StudentController extends Controller
             }
 
             $newEntry = UnverifiedStudent::create([
-                'TITLE' => request('Title'),
+                'TITLE' => $title,
                 'FIRST_NAME' => request('FirstName'),
                 'MI' => request('MI'),
                 'LAST_NAME' => request('LastName'),

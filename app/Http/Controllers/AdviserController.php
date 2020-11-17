@@ -148,14 +148,14 @@ class AdviserController extends Controller
 
             $newEntry = UnverifiedAdviser::create([
                 'TITLE' => $title,
-                'FIRST_NAME' =>request('FirstName'),
+                'FIRST_NAME' => request('FirstName'),
                 'MI' => request('MI'),
                 'LAST_NAME' => request('LastName'),
                 'SUFFIX' => request('Suffix'),
                 'EMAIL' => request('Email'),
-                'DEPARTMENT' => request('Department'),
-                'OFFICE' => request('Office'),
-                'HASH_PW' => Hash::make(request('Password')),
+                'DEPARTMENT' => request('DEPARTMENT'),
+                'OFFICE' => request('OFFICE'),
+                'HASH_PW' => Hash::make($unverified_pw),
                 'CREATED' => Carbon::now(),
                 'UPDATED' => Carbon::now(),
                 'VERIFICATION_TOKEN' => $verificationToken
