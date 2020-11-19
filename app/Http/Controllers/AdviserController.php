@@ -267,7 +267,6 @@ class AdviserController extends Controller
 
         $student = VerifiedStudent::where('SID', request('StudentID'))->first();
 
-        //dd($student);
 
         // Check if student with given Student ID exists in VerifiedStudent table
         if(isset($student) && ! empty($student)){

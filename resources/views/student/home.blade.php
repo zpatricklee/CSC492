@@ -21,10 +21,12 @@
                 font-size: 25px;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 200;
-                width: 75%;
+                width: 74%;
                 float: left;
                 text-align: center;
-                height: 50%;
+                height: 40%;
+
+                border: 1px solid red;
             }
 
             .AdvisorNotes {
@@ -34,19 +36,25 @@
                 width: 25%;
                 float: right;
                 text-align: center;
-                height: 50%;
+                height: 40%;
+
+                border: 1px solid blue;
             }
 
             .Courses {
                 font-size: 25px;
                 text-align: center;
                 width: 100%;
+
+                border: 1px solid green;
             }
 
             .CompletedCourse {
                 font-size: 25px;
                 text-align: center;
                 width: 100%;
+
+                border: 1px solid pink;
             }
 
             option{
@@ -56,104 +64,110 @@
         </style>
     </head>
     <body>
-                <div class="TopBar">
-                        Welcome Student
-                    <div class="logout">
-                        <A HREF="./logout"  STYLE="color: #800000">LOG OUT</A>
-                    </div>
-                </div>
+        <div class="TopBar">
+                Welcome, {{ $user->first_name }}
+            <div class="logout">
+                <A HREF="./logout"  STYLE="color: #800000">LOG OUT</A>
+            </div>
+        </div>
 
-                <div class="MainContent">
-                <h4> <center>Next Semester courses</center></h4>
-                <form action="/resources/views/student/action_page.php" method="post">
-					<label for = "Course1">Course: </label>
-                    <?php
-                        $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
-                        $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
-                    ?>
-				    <select name="course_name1" >
-                        <option></option>  
-                        <?php
-                            while($rows = $fetchCourse->fetch_assoc()){
-                                $COURSE_NAME1 = $rows['COURSE_NAME'];
-                                echo "<option value = '$COURSE_NAME1' >$COURSE_NAME1</option>";
-                            }
-                        ?> 
-                    </select>
-					</select>
-					<br></br>
-					<label for = "Course2">Course: </label>
-					<?php
-                        $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
-                        $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
-                    ?>
-					<select name="course_name2">.
-                        <option></option>
-                        <?php
-                            while($rows = $fetchCourse->fetch_assoc()){
-                                $COURSE_NAME2 = $rows['COURSE_NAME'];
-                                echo "<option value = '$COURSE_NAME2' >$COURSE_NAME2</option>";
-                            }
-                        ?>
-                    </select>
-					<br></br>
-					<label for = "Course3">Course: </label> 
-					<?php
-                        $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
-                        $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
-                    ?>
-					<select name="course_name3">
-                        <option></option>
-                        <?php
-                            while($rows = $fetchCourse->fetch_assoc()){
-                                $COURSE_NAME3 = $rows['COURSE_NAME'];
-                                echo "<option value = '$COURSE_NAME3' >$COURSE_NAME3</option>";
-                            }
-                        ?>
-                    </select>
-					<br></br>
-					<label for = "Course4">Course: </label>
-					<?php
-                        $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db');
-                        $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course");//Here we select the table we want to pull from
-                    ?>
-					<select name="course_name4">
-                        <option></option>
-                        <?php
-                            while($rows = $fetchCourse->fetch_assoc()){
-                                $COURSE_NAME4 = $rows['COURSE_NAME'];
-                                echo "<option value = '$COURSE_NAME4' >$COURSE_NAME4</option>";
-                            }
-                        ?>
-                    </select>
-					<br></br>
-					<input type="submit" value="Submit">
-                    </form>
-                </div>
-                </div>
+        <!-- Error-handling -->
+        @if (session('warning'))
+            <div class="alert alert-warning">
+                {!! session('warning') !!}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="error-notification">
+                Please fix the following errors to continue:
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-                <div class="AdvisorNotes">
-                    <h4>AdvisorNotes</h4>
-                </div>
+        <div class="MainContent">
+        <h4> <center>Preferred Courses</center></h4>
+        <form action="" method="post">
 
-                <div class="Courses">
-                    <h4>Courses</h4>
-                        <?php
-                            $courseSQL = NEW MySQLi('localhost', 'root', 'root','advising_db'); 
-                            $fetchCourse = $courseSQL->query("SELECT COURSE_NAME FROM course"); //Here we select the table we want to pull from
-                        ?>
-                        <ul style ="list-style-type:none; margin:0; padding:0">
-                            <?php
-                                while($rows = $fetchCourse->fetch_assoc()){
-                                    $COURSE_NAME = $rows['COURSE_NAME'];
-                                echo "<li value = '$COURSE_NAME' >$COURSE_NAME</li>";
-                                }
-                            ?>
-                </div>
+        <!-- Laravel's security out of the box -->
+        {{ csrf_field() }}
 
-                <div class="CompletedCourse">
-                    <h4>CompletedCourse</h4>
-                </div>
+        Term: 
+        <select name="Term">
+            <option></option>
+            @foreach ($terms as $term)
+                <option value="{{ $term->TERM }}">{{ $term->TERM }}</option>
+            @endforeach
+        </select>
+        <select name="Year">
+            <option></option>
+            <option value="{{ date('Y') }}">{{ date('Y') }}</option>
+            <option value="{{ date('Y')+1 }}">{{ date('Y')+1 }}</option>
+        </select>
+        
+        <br>
+        Course: 
+        <select name="Course1">
+            <option></option>
+            @foreach ($courses as $key=>$value)
+                <option value="{{ $key }}" {{ old('Course1') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+            @endforeach
+        </select>
+        <br>
+        Course:
+        <select name="Course2">
+            <option></option>
+            @foreach ($courses as $key=>$value)
+                <option value="{{ $key }}" {{ old('Course2') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+            @endforeach
+        </select>
+        <br>
+        Course:
+        <select name="Course3">
+            <option></option>
+            @foreach ($courses as $key=>$value)
+                <option value="{{ $key }}" {{ old('Course3') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+            @endforeach
+        </select>
+        <br>
+        Course:
+        <select name="Course4">
+            <option></option>
+            @foreach ($courses as $key=>$value)
+                <option value="{{ $key }}" {{ old('Course4') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+            @endforeach
+        </select>
+        <br>
+        Course:
+        <select name="Course5">
+            <option></option>
+            @foreach ($courses as $key=>$value)
+                <option value="{{ $key }}" {{ old('Course5') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+            @endforeach
+        </select>
+        <br>
+        </div>
+
+        <div class="AdvisorNotes">
+            <h4>Advisor Notes</h4>
+                @if ($selected != NULL)
+                    @foreach ($selected as $s)
+                        {{ $s->COURSE_ABBR }} {{ $s->COURSE_NAME }}
+                    @endforeach
+                @endif
+        </div>
+
+        <div class="Courses">
+            <h4>Courses</h4>
+                
+        </div>
+
+        <div class="CompletedCourse">
+            <h4>Completed Courses</h4>
+        </div>
     </body>
 </html>
 <!-- 					CSC 121: Introduction to Computer Science and Programming I

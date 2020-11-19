@@ -35,6 +35,7 @@ Route::prefix('student')->group(function () {
     Route::get('/verify/{token}', 'StudentController@verifyEntry');
 
     Route::get('/home', 'StudentController@createHome')->middleware(['auth:student']);
+    Route::post('/home', 'StudentController@storeHome')->middleware(['auth:student']);
 
     Route::get('/logout', 'StudentController@logout');
 });

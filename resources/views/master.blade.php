@@ -33,8 +33,8 @@
             color: red;
         }
         hr {
-        margin-left: auto;
-        margin-right: auto;
+            margin-left: auto;
+            margin-right: auto;
         }
         .login-container {
             display: flex;
