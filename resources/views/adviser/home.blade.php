@@ -15,7 +15,7 @@
 <div class="top-bar">
     Adviser Home Page
     <div class="logout">
-        <A HREF="./logout" STYLE="color: #800000">LOG OUT</A>
+        <A HREF="./logout" >LOG OUT</A>
     </div>
 </div>
 <hr>
