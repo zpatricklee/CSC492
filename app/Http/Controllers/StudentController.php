@@ -252,11 +252,12 @@ class StudentController extends Controller
      *****************/
     public function createHome(){
         $user = Auth::guard('student')->user();
-        $selected = SelectedCourse::where('STUDENT_ID', $user->student_id)->get(); 
+        $selectedCourses = SelectedCourse::where('STUDENT_ID', $user->student_id)
+                            ->orderByDesc('TERM')->get(); // Need to alter tables to sort by term properly!
         $allCourses = Course::select('COURSE_ABBR', 'COURSE_NAME')->pluck('COURSE_NAME', 'COURSE_ABBR');
         $completedCourses = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->where('STUDENT_ID', $user->student_id)->pluck('COURSE_NAME', 'COURSE_ABBR');
 
-        $courses = $allCourses->diff($completedCourses);
+        $remainingCourses = $allCourses->diff($completedCourses);
 
         //dd($selected);
 
@@ -266,9 +267,7 @@ class StudentController extends Controller
 
         $terms = Terms::all();
 
-        //dd($course);
-
-        return view('student.home')->with('user', $user)->with('selected', $selected)->with('courses', $courses)->with('terms', $terms);
+        return view('student.home')->with('user', $user)->with('selectedCourses', $selectedCourses)->with('remainingCourses', $remainingCourses)->with('terms', $terms)->with('completedCourses', $completedCourses);
     }
 
     /*****************
@@ -288,67 +287,63 @@ class StudentController extends Controller
         $user = Auth::guard('student')->user();
 
         //Format Term to include term AND year
+        /*
         $term_year = request('Term');
         $term_year += ' ';
         $term_year += request('Year');
+        */
+        $term_year = request('Term').' '.request('Year');
 
         // Add Course1
         $courseName = Course::where('COURSE_ABBR', request('Course1'))->first();
-        $student_courses = SelectedCourse::create([
-            'STUDENT_ID' => $user->student_id,
-            'TERM' => $term_year,
-            'COURSE_ABBR' => request('Course1'),
-            'COURSE_NAME' => $courseName->COURSE_NAME,
-            'ADDED_AT' => Carbon::now()
-        ]);
+        $student_courses = SelectedCourse::updateOrCreate(
+            ['STUDENT_ID' => $user->student_id, 'COURSE_ABBR' => request('Course1'), 'COURSE_NAME' => $courseName->COURSE_NAME],
+            ['TERM' => $term_year, 'ADDED_AT' => Carbon::now()]        
+        );
 
         // Make sure the courses being added are unique
-        if(request('Course2') != request('Course1')){
-            $courseName = Course::where('COURSE_ABBR', request('Course2'))->first();
+        if(request('Course2') != NULL){
+            if(request('Course2') != request('Course1')){
+                $courseName = Course::where('COURSE_ABBR', request('Course2'))->first();
 
-            $student_courses = SelectedCourse::create([
-                'STUDENT_ID' => $user->student_id,
-                'TERM' => $term_year,
-                'COURSE_ABBR' => request('Course2'),
-                'COURSE_NAME' => $courseName->COURSE_NAME,
-                'ADDED_AT' => Carbon::now()
-            ]);
+                $student_courses = SelectedCourse::updateOrCreate(
+                    ['STUDENT_ID' => $user->student_id, 'COURSE_ABBR' => request('Course2'), 'COURSE_NAME' => $courseName->COURSE_NAME],
+                    ['TERM' => $term_year, 'ADDED_AT' => Carbon::now()]        
+                );
+            }
         }
-        if((request('Course3') != request('Course2')) && (request('Course3') != request('Course1'))){
-            $courseName = Course::where('COURSE_ABBR', request('Course3'))->first();
-            
-            $student_courses = SelectedCourse::create([
-                'STUDENT_ID' => $user->student_id,
-                'TERM' => $term_year,
-                'COURSE_ABBR' => request('Course3'),
-                'COURSE_NAME' => $courseName->COURSE_NAME,
-                'ADDED_AT' => Carbon::now()
-            ]);
+        if(request('Course3') != NULL){
+            if((request('Course3') != request('Course2')) && (request('Course3') != request('Course1'))){
+                $courseName = Course::where('COURSE_ABBR', request('Course3'))->first();
+                
+                $student_courses = SelectedCourse::updateOrCreate(
+                    ['STUDENT_ID' => $user->student_id, 'COURSE_ABBR' => request('Course3'), 'COURSE_NAME' => $courseName->COURSE_NAME],
+                    ['TERM' => $term_year, 'ADDED_AT' => Carbon::now()]        
+                );
+            }
         }
-        if((request('Course4') != request('Course3')) && (request('Course4') != request('Course2')) && (request('Course4') != request('Course1'))){
-            $courseName = Course::where('COURSE_ABBR', request('Course4'))->first();
-            
-            $student_courses = SelectedCourse::create([
-                'STUDENT_ID' => $user->student_id,
-                'TERM' => $term_year,
-                'COURSE_ABBR' => request('Course4'),
-                'COURSE_NAME' => $courseName->COURSE_NAME,
-                'ADDED_AT' => Carbon::now()
-            ]);
+        if(request('Course4') != NULL){
+            if((request('Course4') != request('Course3')) && (request('Course4') != request('Course2')) && (request('Course4') != request('Course1'))){
+                $courseName = Course::where('COURSE_ABBR', request('Course4'))->first();
+                
+                $student_courses = SelectedCourse::updateOrCreate(
+                    ['STUDENT_ID' => $user->student_id, 'COURSE_ABBR' => request('Course4'), 'COURSE_NAME' => $courseName->COURSE_NAME],
+                    ['TERM' => $term_year, 'ADDED_AT' => Carbon::now()]        
+                );
+            }
         }
-        if((request('Course5') != request('Course4')) && (request('Course5') != request('Course3')) && (request('Course5') != request('Course2')) && (request('Course5') != request('Course1'))){
-            $courseName = Course::where('COURSE_ABBR', request('Course5'))->first();
-            
-            $student_courses = SelectedCourse::create([
-                'STUDENT_ID' => $user->student_id,
-                'TERM' => $term_year,
-                'COURSE_ABBR' => request('Course3'),
-                'COURSE_NAME' => $courseName->COURSE_NAME,
-                'ADDED_AT' => Carbon::now()
-            ]);
+        if(request('Course5') != NULL){
+            if((request('Course5') != request('Course4')) && (request('Course5') != request('Course3')) && (request('Course5') != request('Course2')) && (request('Course5') != request('Course1'))){
+                $courseName = Course::where('COURSE_ABBR', request('Course5'))->first();
+                
+                $student_courses = SelectedCourse::updateOrCreate(
+                    ['STUDENT_ID' => $user->student_id, 'COURSE_ABBR' => request('Course5'), 'COURSE_NAME' => $courseName->COURSE_NAME],
+                    ['TERM' => $term_year, 'ADDED_AT' => Carbon::now()]        
+                );
+            }
         }
 
-        return view('student.home');
+        return redirect('/student/home');
     }
 
 }

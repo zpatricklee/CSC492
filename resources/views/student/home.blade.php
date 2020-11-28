@@ -112,7 +112,7 @@
         Course: 
         <select name="Course1">
             <option></option>
-            @foreach ($courses as $key=>$value)
+            @foreach ($remainingCourses as $key=>$value)
                 <option value="{{ $key }}" {{ old('Course1') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
             @endforeach
         </select>
@@ -120,7 +120,7 @@
         Course:
         <select name="Course2">
             <option></option>
-            @foreach ($courses as $key=>$value)
+            @foreach ($remainingCourses as $key=>$value)
                 <option value="{{ $key }}" {{ old('Course2') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
             @endforeach
         </select>
@@ -128,7 +128,7 @@
         Course:
         <select name="Course3">
             <option></option>
-            @foreach ($courses as $key=>$value)
+            @foreach ($remainingCourses as $key=>$value)
                 <option value="{{ $key }}" {{ old('Course3') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
             @endforeach
         </select>
@@ -136,7 +136,7 @@
         Course:
         <select name="Course4">
             <option></option>
-            @foreach ($courses as $key=>$value)
+            @foreach ($remainingCourses as $key=>$value)
                 <option value="{{ $key }}" {{ old('Course4') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
             @endforeach
         </select>
@@ -144,60 +144,36 @@
         Course:
         <select name="Course5">
             <option></option>
-            @foreach ($courses as $key=>$value)
+            @foreach ($remainingCourses as $key=>$value)
                 <option value="{{ $key }}" {{ old('Course5') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
             @endforeach
         </select>
-        <br>
+        <br><br>
+        <input type="submit" name="Submit" value="Submit Courses for Approval">
+        </form>
         </div>
 
         <div class="AdvisorNotes">
             <h4>Advisor Notes</h4>
-                @if ($selected != NULL)
-                    @foreach ($selected as $s)
-                        {{ $s->COURSE_ABBR }} {{ $s->COURSE_NAME }}
-                    @endforeach
-                @endif
+                
         </div>
 
-        <div class="Courses">
-            <h4>Courses</h4>
-                
+        <div class="Selected Courses">
+            <h4>Courses Pending Approval</h4>
+            @if ($selectedCourses != NULL)
+                @foreach ($selectedCourses as $s)
+                    <li>{{ $s->COURSE_ABBR }} {{ $s->COURSE_NAME }} ({{ $s->TERM }})</li>
+                @endforeach
+            @endif
         </div>
 
         <div class="CompletedCourse">
             <h4>Completed Courses</h4>
+            @foreach ($completedCourses as $key=>$value)
+                <li>{{ $key }} {{ $value }}</li>
+            @endforeach
         </div>
     </body>
 </html>
-<!-- 					CSC 121: Introduction to Computer Science and Programming I
-						CSC 123: Introduction to Computer Science and Programming II
-						CSC 221: Assembly Language and Introduction to Computer Organization
-						MAT 191: Calculus I
-						MAT 193: Calculus II
-						MAT 271: Foundations of Higher Mathematics
-						MAT 281: Discrete Mathematics
-						CSC 311: Data Structures
-						CSC 321: Programming Languages
-						CSC 331: Computer Organization
-						CSC 341: Operating Systems
-						CSC 395: Special Topics
-						CSC 401: Analysis of Algorithms
-						CSC 411: Artificial Intelligence
-						CSC 421: Advanced Programming Languages
-						CSC 431: Advanced Computer Organization
-						CSC 441: Advanced Operating Systems
-						CSC 451: Computer Networks
-						CSC 453: Data Management
-						CSC 455: World Wide Web Design and Management
-						CSC 459: Security Engineering
-						CSC 461: Computer Graphics I
-						CSC 463: Computer Graphics II
-						CSC 471: Compiler Construction
-						CSC 490: Senior Seminar
-						CSC 495: Special Topics
-						MAT 367: Numerical Analysis I
-						MAT 369: Numerical Analysis II
--->
 
 @endsection
