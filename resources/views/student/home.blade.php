@@ -166,10 +166,14 @@
 
             <h4>Courses Pending Approval</h4>
             @if ($selectedCourses != NULL)
-                <table align="center">
+                <table align="center" border="true" style="border: 1px solid black; border-collapse: collapse">
+                <th align="left" style="padding: 5px">SELECT</th>
+                <th align="left" style="padding: 5px">COURSE ABBR.</th>
+                <th align="left" style="padding: 5px">COURSE NAME</th>
+                <th align="left" style="padding: 5px">TERM</th>
                 @foreach ($selectedCourses as $s)
                     <tr>
-                        <td><input type="checkbox" name="removeSelected[]" value="{{ $s->COURSE_ABBR }}"></td><td>{{ $s->COURSE_ABBR }}</td><td>{{ $s->COURSE_NAME }}</td><td>{{ $s->TERM }} {{ $s->YEAR }}</td></input>
+                        <td align="center"><input type="checkbox" name="removeSelected[]" value="{{ $s->COURSE_ABBR }}"></td><td style="padding: 5px">{{ $s->COURSE_ABBR }}</td><td style="padding: 5px">{{ $s->COURSE_NAME }}</td><td style="padding: 5px">{{ $s->TERM }} {{ $s->YEAR }}</td></input>
                     </tr>
                 @endforeach
                 </table>
@@ -180,9 +184,17 @@
 
         <div class="CompletedCourse">
             <h4>Completed Courses</h4>
-            @foreach ($completedCourses as $key=>$value)
-                <li>{{ $key }} {{ $value }}</li>
-            @endforeach
+            @if ($completedCourses != NULL)
+                <table align="center" border="true" style="border: 1px solid black; border-collapse: collapse">
+                <th align="left" style="padding: 5px">COURSE ABBR.</th>
+                <th align="left" style="padding: 5px">COURSE NAME</th>
+                @foreach ($completedCourses as $key=>$value)
+                    <tr>
+                        <td>{{ $key }}</td><td>{{ $value }}</td>
+                    </tr>
+                @endforeach
+                </table>
+            @endif
         </div>
     </body>
 </html>

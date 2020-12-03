@@ -253,12 +253,15 @@ class StudentController extends Controller
     public function createHome(){
         $user = Auth::guard('student')->user();
         $selectedCourses = SelectedCourse::where('STUDENT_ID', $user->student_id)
-                            ->orderBy('YEAR', 'asc')->orderBy('TERM_ID', 'asc')->get(); // Need to alter tables to sort by term properly!
+                            ->orderBy('YEAR', 'asc')->orderBy('TERM_ID', 'asc')->get();
         $allCourses = Course::select('COURSE_ABBR', 'COURSE_NAME')->pluck('COURSE_NAME', 'COURSE_ABBR');
-        $completedCourses = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->where('STUDENT_ID', $user->student_id)->pluck('COURSE_NAME', 'COURSE_ABBR');
+        $completedCourses = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->where('STUDENT_ID', $user->student_id)->orderBy('COURSE_ABBR', 'asc')->pluck('COURSE_NAME', 'COURSE_ABBR');
         $terms = Terms::all();
 
         $remainingCourses = $allCourses->diff($completedCourses); 
+
+        //$test = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->orderBy('COURSE_ABBR', 'asc')->pluck('COURSE_NAME', 'COURSE_ABBR');
+        //dd($test);
 
         return view('student.home')->with('user', $user)->with('selectedCourses', $selectedCourses)->with('remainingCourses', $remainingCourses)->with('terms', $terms)->with('completedCourses', $completedCourses);
     }
@@ -373,11 +376,13 @@ class StudentController extends Controller
         // Remove selected courses
         else {  
             $toRemove = $request->input('removeSelected');
-            //dd($toRemove);
 
-            // Remove selected courses from selected_course table
-            for($x = 0; $x < count($toRemove); $x++){
-                SelectedCourse::where('STUDENT_ID', $user->student_id)->where('COURSE_ABBR', $toRemove[$x])->delete();
+            // Delete courses if courses were selected
+            if($toRemove != null){
+                // Remove selected courses from selected_course table
+                for($x = 0; $x < count($toRemove); $x++){
+                    SelectedCourse::where('STUDENT_ID', $user->student_id)->where('COURSE_ABBR', $toRemove[$x])->delete();
+                }
             }
         }
 
