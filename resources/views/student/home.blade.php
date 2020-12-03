@@ -159,16 +159,23 @@
         </div>
 
         <div class="Selected Courses">
+        <form action="" method="post">
+
+        <!-- Laravel's security out of the box -->
+        {{ csrf_field() }}
+
             <h4>Courses Pending Approval</h4>
             @if ($selectedCourses != NULL)
                 <table align="center">
                 @foreach ($selectedCourses as $s)
                     <tr>
-                        <td>{{ $s->COURSE_ABBR }}</td><td>{{ $s->COURSE_NAME }}</td><td>{{ $s->TERM }} {{ $s->YEAR }}</td>
+                        <td><input type="checkbox" name="removeSelected[]" value="{{ $s->COURSE_ABBR }}"></td><td>{{ $s->COURSE_ABBR }}</td><td>{{ $s->COURSE_NAME }}</td><td>{{ $s->TERM }} {{ $s->YEAR }}</td></input>
                     </tr>
                 @endforeach
                 </table>
             @endif
+            <br><input type="submit" name="Remove Selected Courses" value="Remove Selected Courses">
+        </form>
         </div>
 
         <div class="CompletedCourse">
