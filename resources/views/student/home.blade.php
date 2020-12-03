@@ -161,9 +161,13 @@
         <div class="Selected Courses">
             <h4>Courses Pending Approval</h4>
             @if ($selectedCourses != NULL)
+                <table align="center">
                 @foreach ($selectedCourses as $s)
-                    <li>{{ $s->COURSE_ABBR }} {{ $s->COURSE_NAME }} ({{ $s->TERM }})</li>
+                    <tr>
+                        <td>{{ $s->COURSE_ABBR }}</td><td>{{ $s->COURSE_NAME }}</td><td>{{ $s->TERM }} {{ $s->YEAR }}</td>
+                    </tr>
                 @endforeach
+                </table>
             @endif
         </div>
 
