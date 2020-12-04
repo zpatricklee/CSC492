@@ -99,7 +99,7 @@
         <select name="Term">
             <option></option>
             @foreach ($terms as $term)
-                <option value="{{ $term->TERM }}">{{ $term->TERM }}</option>
+                <option value="{{ $term->TERM_NAME }}">{{ $term->TERM_NAME }}</option>
             @endforeach
         </select>
         <select name="Year">

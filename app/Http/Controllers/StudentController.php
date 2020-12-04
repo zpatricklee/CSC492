@@ -260,9 +260,6 @@ class StudentController extends Controller
 
         $remainingCourses = $allCourses->diff($completedCourses); 
 
-        //$test = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->orderBy('COURSE_ABBR', 'asc')->pluck('COURSE_NAME', 'COURSE_ABBR');
-        //dd($test);
-
         return view('student.home')->with('user', $user)->with('selectedCourses', $selectedCourses)->with('remainingCourses', $remainingCourses)->with('terms', $terms)->with('completedCourses', $completedCourses);
     }
 
