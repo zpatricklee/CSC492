@@ -82,7 +82,7 @@
             width: 7%;
             font-weight: bold;
             float: right;
-            border-style: solid;
+            //border-style: solid;
         }
     </STYLE>
     </HEAD>

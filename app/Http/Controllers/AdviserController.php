@@ -8,6 +8,9 @@ use App\VerifiedAdviser;
 use App\UnverifiedAdviser;
 use App\VerifiedStudent;
 use App\A_Session;
+use App\CompletedCourses;
+use App\SelectedCourse;
+use App\Terms;
 use App\Mail\AdviserConfirmationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -289,8 +292,53 @@ class AdviserController extends Controller
      * 
      *****************/
     public function createViewStudent(){
-        $user = Auth::guard('adviser')->user();
+        $adviser = Auth::guard('adviser')->user();
+        $student_id = $adviser->SID_REQUEST;
+        $viewTerm = $adviser->VIEW_TERM;
+        $viewYear = $adviser->VIEW_YEAR;
 
-        return view('adviser.viewStudent')->with('user', $user);
+        $selectedCourses = SelectedCourse::where('STUDENT_ID', $student_id)->where('TERM', $viewTerm)
+                            ->where('YEAR', $viewYear)->orderBy('YEAR', 'asc')->orderBy('TERM_ID', 'asc')->get();
+        $completedCourses = CompletedCourses::where('STUDENT_ID', $student_id)
+                            ->orderBy('YEAR', 'asc')->orderBy('TERM_ID', 'asc')->get();
+        $terms = Terms::all();
+
+        // Get remaining courses using diff()
+        $allCourses = Course::select('COURSE_ABBR', 'COURSE_NAME')->pluck('COURSE_ABBR', 'COURSE_NAME');
+        $completed = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->where('STUDENT_ID', $student_id)
+                    ->orderBy('COURSE_ABBR', 'asc')->pluck('COURSE_NAME', 'COURSE_ABBR');
+        $remainingCourses = $allCourses->diff($completed);   
+        
+        //dd($selectedCourses);
+
+        return view('adviser.viewStudent')->with('selected', $selectedCourses)
+                ->with('completed', $completedCourses)->with('terms', $terms)
+                ->with('viewTerm', $adviser->VIEW_TERM)->with('viewYear', $adviser->VIEW_YEAR)
+                ->with('remainingCourses', $remainingCourses);
+    }
+
+    /*****************
+     * 
+     * Function:    storeViewStudent
+     * 
+     * Description: Perform adviser actions and/or store changes to student's preferred (selected) courses
+     * 
+     *****************/
+    public function storeViewStudent(Request $request){
+        $adviser = Auth::guard('adviser')->user();
+
+        if($request->input('SubmitTerm') != null){
+            request()->validate([
+                'Term' => ['required'],
+                'Year' => ['required']
+            ]);
+
+            // Update term and year that adviser wants to view
+            $adviser->VIEW_TERM = request('Term');
+            $adviser->VIEW_YEAR = request('Year');
+            $adviser->save();
+
+            return redirect('/adviser/viewStudent');
+        }
     }
 }

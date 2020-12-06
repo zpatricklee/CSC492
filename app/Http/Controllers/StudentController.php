@@ -255,12 +255,14 @@ class StudentController extends Controller
         $selectedCourses = SelectedCourse::where('STUDENT_ID', $user->student_id)
                             ->orderBy('YEAR', 'asc')->orderBy('TERM_ID', 'asc')->get();
         $allCourses = Course::select('COURSE_ABBR', 'COURSE_NAME')->pluck('COURSE_NAME', 'COURSE_ABBR');
-        $completedCourses = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->where('STUDENT_ID', $user->student_id)->orderBy('COURSE_ABBR', 'asc')->pluck('COURSE_NAME', 'COURSE_ABBR');
+        $completedCourses = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->where('STUDENT_ID', $user->student_id)
+                            ->orderBy('COURSE_ABBR', 'asc')->pluck('COURSE_NAME', 'COURSE_ABBR');
         $terms = Terms::all();
 
         $remainingCourses = $allCourses->diff($completedCourses); 
 
-        return view('student.home')->with('user', $user)->with('selectedCourses', $selectedCourses)->with('remainingCourses', $remainingCourses)->with('terms', $terms)->with('completedCourses', $completedCourses);
+        return view('student.home')->with('user', $user)->with('selectedCourses', $selectedCourses)
+                ->with('remainingCourses', $remainingCourses)->with('terms', $terms)->with('completedCourses', $completedCourses);
     }
 
     /*****************

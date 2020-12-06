@@ -61,6 +61,9 @@ Route::prefix('adviser')->group(function () {
     Route::post('/home', 'AdviserController@storeHome')->middleware(['auth:adviser']);
 
     Route::get('/viewStudent', 'AdviserController@createViewStudent')->middleware(['auth:adviser']);
+    Route::post('/viewStudent', 'AdviserController@storeViewStudent')->middleware(['auth:adviser']);
 
     Route::get('/logout', 'AdviserController@logout');
+
+
 });
