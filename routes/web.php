@@ -64,6 +64,4 @@ Route::prefix('adviser')->group(function () {
     Route::post('/viewStudent', 'AdviserController@storeViewStudent')->middleware(['auth:adviser']);
 
     Route::get('/logout', 'AdviserController@logout');
-
-
 });

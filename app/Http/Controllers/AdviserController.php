@@ -298,7 +298,7 @@ class AdviserController extends Controller
         $viewYear = $adviser->VIEW_YEAR;
 
         $selectedCourses = SelectedCourse::where('STUDENT_ID', $student_id)->where('TERM', $viewTerm)
-                            ->where('YEAR', $viewYear)->orderBy('YEAR', 'asc')->orderBy('TERM_ID', 'asc')->get();
+                            ->where('YEAR', $viewYear)->orderBy('COURSE_ABBR')->get();
         $completedCourses = CompletedCourses::where('STUDENT_ID', $student_id)
                             ->orderBy('YEAR', 'asc')->orderBy('TERM_ID', 'asc')->get();
         $terms = Terms::all();
@@ -306,15 +306,12 @@ class AdviserController extends Controller
         // Get remaining courses using diff()
         $allCourses = Course::select('COURSE_ABBR', 'COURSE_NAME')->pluck('COURSE_ABBR', 'COURSE_NAME');
         $completed = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->where('STUDENT_ID', $student_id)
-                    ->orderBy('COURSE_ABBR', 'asc')->pluck('COURSE_NAME', 'COURSE_ABBR');
+                    ->orderBy('COURSE_ABBR', 'asc')->pluck('COURSE_ABBR', 'COURSE_NAME');
         $remainingCourses = $allCourses->diff($completed);   
-        
-        //dd($selectedCourses);
 
         return view('adviser.viewStudent')->with('selected', $selectedCourses)
                 ->with('completed', $completedCourses)->with('terms', $terms)
-                ->with('viewTerm', $adviser->VIEW_TERM)->with('viewYear', $adviser->VIEW_YEAR)
-                ->with('remainingCourses', $remainingCourses);
+                ->with('remainingCourses', $remainingCourses)->with('adviser', $adviser);
     }
 
     /*****************
@@ -337,6 +334,162 @@ class AdviserController extends Controller
             $adviser->VIEW_TERM = request('Term');
             $adviser->VIEW_YEAR = request('Year');
             $adviser->save();
+
+            return redirect('/adviser/viewStudent');
+        }
+        else if($request->input('Approve') != null){
+            $approve = $request->input('approve');      // array of approved courses
+            $completed = $request->input('completed');  // array of courses to be marked complete
+
+            if($approve != null){
+                for($i = 0; $i < count($approve); $i++){
+                    $course = SelectedCourse::where('STUDENT_ID', $adviser->SID_REQUEST)
+                                            ->where('COURSE_ABBR', $approve[$i])->first();
+                    $course->APPROVED_AT = Carbon::now();
+                    $course->save();
+                }
+            }
+            if($completed != null){
+                // Delete records from 'selected_course', and create record in 'completed_courses'
+                for($i = 0; $i < count($completed); $i++){
+                    $course = SelectedCourse::where('STUDENT_ID', $adviser->SID_REQUEST)
+                                            ->where('COURSE_ABBR', $completed[$i])->first();
+
+                    // Copy to CompletedCourse
+                    $cc = CompletedCourses::create([
+                        'STUDENT_ID' => $course->STUDENT_ID,
+                        'COURSE_ABBR' => $course->COURSE_ABBR,
+                        'COURSE_NAME' => $course->COURSE_NAME,
+                        'TERM' => $course->TERM,
+                        'TERM_ID' => $course->TERM_ID,
+                        'YEAR' => $course->YEAR,
+                        'MARKED_COMPLETE' => Carbon::now()
+                    ]);
+
+                    // Delete from SelectedCourse
+                    $course->delete();
+                }
+            }
+
+            return redirect('/adviser/viewStudent');
+        }
+        else if($request->input('Modify')){
+            $adviser->VIEW_MODE = 1;
+            $adviser->save();
+
+            return redirect('/adviser/viewStudent');
+        }
+        else if($request->input('GoBack') != null){
+            $adviser->VIEW_MODE = 0;
+            $adviser->save();
+
+            return redirect('/adviser/viewStudent');
+        }
+        else if($request->input('Complete')){
+            $studentCourses = SelectedCourse::where('STUDENT_ID', $adviser->SID_REQUEST)
+                                            ->where('TERM', $adviser->VIEW_TERM)
+                                            ->where('YEAR', $adviser->VIEW_YEAR)
+                                            ->orderBy('APPROVED_AT', 'asc')->get();
+            
+
+
+            // If student is not taking any courses for the upcoming semester
+            if(empty($studentCourses) || $studentCourses[0]->APPROVED_AT != null){
+                $student = VerifiedStudent::where('SID', $adviser->SID_REQUEST)->first();
+                $student->REMOVE_HOLD_FOR = $adviser->VIEW_TERM . " " . $adviser->VIEW_YEAR;
+                $student->LAST_MEETING = Carbon::now();
+                $student->save();
+
+                return redirect('/adviser/home');
+            }
+            else{
+                return redirect('/adviser/viewStudent')->withErrors('ALL courses must be reviewed and approved by adviser');
+            }
+                        
+        }
+        else if($request->input('SubmitChanges')){
+            $adviser->VIEW_MODE = 0;
+            $adviser->save();
+
+            switch($adviser->VIEW_TERM){
+                case 'WINTER':
+                    $term_id = 1;
+                    break;
+                case 'SPRING':
+                    $term_id = 2;
+                    break;
+                case 'SUMMER':
+                    $term_id = 3;
+                    break;
+                case 'FALL':
+                    $term_id = 4;
+                    break;
+                default:
+            }
+
+            // Delete previous records for the selected term and year
+            SelectedCourse::where('STUDENT_ID', $adviser->SID_REQUEST)->where('TERM', $adviser->VIEW_TERM)->where('YEAR', $adviser->VIEW_YEAR)->delete();
+
+            if(request('Course1') != null){
+                $sc = SelectedCourse::updateOrCreate([
+                    'STUDENT_ID' => $adviser->SID_REQUEST,
+                    'COURSE_ABBR' => request('Course1'),
+                    'COURSE_NAME' => Course::where('COURSE_ABBR', request('Course1'))->first()->COURSE_NAME,
+                ]);
+                $sc->TERM = $adviser->VIEW_TERM;
+                $sc->TERM_ID = $term_id;
+                $sc->YEAR = $adviser->VIEW_YEAR;
+                $sc->ADDED_AT = Carbon::now();
+                $sc->save();
+            }
+            if(request('Course2') != null){
+                $sc = SelectedCourse::updateOrCreate([
+                    'STUDENT_ID' => $adviser->SID_REQUEST,
+                    'COURSE_ABBR' => request('Course2'),
+                    'COURSE_NAME' => Course::where('COURSE_ABBR', request('Course2'))->first()->COURSE_NAME,
+                ]);
+                $sc->TERM = $adviser->VIEW_TERM;
+                $sc->TERM_ID = $term_id;
+                $sc->YEAR = $adviser->VIEW_YEAR;
+                $sc->ADDED_AT = Carbon::now();
+                $sc->save();
+            }
+            if(request('Course3') != null){
+                $sc = SelectedCourse::updateOrCreate([
+                    'STUDENT_ID' => $adviser->SID_REQUEST,
+                    'COURSE_ABBR' => request('Course3'),
+                    'COURSE_NAME' => Course::where('COURSE_ABBR', request('Course3'))->first()->COURSE_NAME,
+                ]);
+                $sc->TERM = $adviser->VIEW_TERM;
+                $sc->TERM_ID = $term_id;
+                $sc->YEAR = $adviser->VIEW_YEAR;
+                $sc->ADDED_AT = Carbon::now();
+                $sc->save();
+            }
+            if(request('Course4') != null){
+                $sc = SelectedCourse::updateOrCreate([
+                    'STUDENT_ID' => $adviser->SID_REQUEST,
+                    'COURSE_ABBR' => request('Course4'),
+                    'COURSE_NAME' => Course::where('COURSE_ABBR', request('Course4'))->first()->COURSE_NAME,
+                ]);
+                $sc->TERM = $adviser->VIEW_TERM;
+                $sc->TERM_ID = $term_id;
+                $sc->YEAR = $adviser->VIEW_YEAR;
+                $sc->ADDED_AT = Carbon::now();
+                $sc->save();
+            }
+            if(request('Course5') != null){
+                $sc = SelectedCourse::updateOrCreate([
+                    'STUDENT_ID' => $adviser->SID_REQUEST,
+                    'COURSE_ABBR' => request('Course5'),
+                    'COURSE_NAME' => Course::where('COURSE_ABBR', request('Course5 '))->first()->COURSE_NAME,
+                ]);
+                $sc->TERM = $adviser->VIEW_TERM;
+                $sc->TERM_ID = $term_id;
+                $sc->YEAR = $adviser->VIEW_YEAR;
+                $sc->ADDED_AT = Carbon::now();
+                $sc->save();
+            }
 
             return redirect('/adviser/viewStudent');
         }

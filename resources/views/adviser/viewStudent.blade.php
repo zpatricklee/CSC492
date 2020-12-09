@@ -10,10 +10,15 @@
         font-weight: 200;
         margin: 0;
     }
-    .logout {
-        font-size: 25px;
-        text-align: right;
+    .navbar {
         width: 100%;
+        font-size: 20px;
+        color: #800000;
+        text-align: right;
+        //background-color: #24d0ff;
+    }
+    .logout {
+        text-align: right;
         //background-color: #24d0ff;
     }
     .student_info {
@@ -35,7 +40,7 @@
         width: 25%;
         float: right;
         text-align: left;
-        height: 55%;
+        height: 60%;
         background-color: #fff824;
     }
     .selectedCourses {
@@ -43,7 +48,7 @@
         text-align: center;
         float: left;
         width: 75%;
-        height: 55%;
+        height: 60%;
         background-color: #4cff24;
     }
     .completedCourses {
@@ -76,8 +81,10 @@
     </div>
 @endif
 
-<div class="logout">
-    <a href="./logout"  style="color: #800000">LOG OUT</a>
+<div class="navbar">
+    <a href="./home" class="navbar">[HOME] </a>
+    <a href="./logout" class="navbar">[LOG OUT]</a>
+    <br><br>
 </div>
 
 <div class="selectedCourses">
@@ -87,126 +94,260 @@
     {{ csrf_field() }}
 
         <h4>Selected Courses / Courses Pending Approval</h4>
+        @if ($adviser->VIEW_MODE == 0)
         View classes for selected term: 
         <select name="Term">
-            <option></option>
+            <option value="" selected></option>
             @foreach ($terms as $term)
-                <option value="{{ $term->TERM_NAME }}">{{ $term->TERM_NAME }}</option>
+                <option value="{{ $term->TERM_NAME }}" {{ ($adviser->VIEW_TERM == $term->TERM_NAME) ? 'selected' : '' }}>{{ $term->TERM_NAME }}</option>
             @endforeach
         </select>
         <select name="Year">
-            <option></option>
-            <option value="{{ date('Y') }}">{{ date('Y') }}</option>
-            <option value="{{ date('Y')+1 }}">{{ date('Y')+1 }}</option>
+            <option value="" selected></option>
+            <option value="{{ date('Y') }}" {{ ($adviser->VIEW_YEAR == date('Y')) ? 'selected' : ''}}>{{ date('Y') }}</option>
+            <option value="{{ date('Y')+1 }}" {{ ($adviser->VIEW_YEAR == date('Y')+1) ? 'selected' : ''}}>{{ date('Y')+1 }}</option>
         </select>
         <input type="submit" name="SubmitTerm" value="Submit">
-
         <br><br>
-        @if ($viewTerm != null && $viewYear != null)
+        @endif
+        
+        @if ($adviser->VIEW_TERM != null && $adviser->VIEW_YEAR != null)
             <table class="adviserTable" align="center">
+                @if ($adviser->VIEW_MODE == 0)
+                <th>STATUS</th>
+                @endif
                 <th>COURSE</th>
                 <th>TERM</th>
+                @if ($adviser->VIEW_MODE == 0)
                 <th>APPROVE</th>
                 <th>COMPLETED</th>
+                @endif
                 <th>ADVISER NOTES</th>
                 <!-- Course 1 -->
                     <tr>
+                        @if($adviser->VIEW_MODE == 0)
                         <td>
-                            <select name="Course1">
-                                <option value="" selected></option>
-                                    
-                                    @foreach ($remainingCourses as $key=>$value)
-                                        <option value="{{ $value }}" {{ (isset($selected[0]) && $selected[0]->COURSE_ABBR == $value) ? 'selected' : '' }}>
-                                            {{ $value }} {{ $key }}
-                                        </option>
-                                    @endforeach
-                            </select>
+                            @if(isset($selected[0]))
+                                @if(isset($selected[0]->APPROVED_AT))
+                                    Approved
+                                @else
+                                    Pending Approval
+                                @endif
+                            @endif
                         </td>
-                        <td>{{ $viewTerm }} {{ $viewYear }}</td>
-                        <td align="center"><input type="checkbox" name="approve[]" value=""></td>
-                        <td align="center"><input type="checkbox" name="completed[]" value=""></td>
+                        @endif
+                        <td>
+                            @if ($adviser->VIEW_MODE == 1)
+                                <select name="Course1">
+                                    <option value="" selected></option>
+                                        @foreach ($remainingCourses as $key=>$value)
+                                            <option value="{{ $value }}" {{ (isset($selected[0]) && $selected[0]->COURSE_ABBR == $value) ? 'selected' : '' }}>
+                                                {{ $value }} {{ $key }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                            @else
+                                {{ isset($selected[0]) ? $selected[0]->COURSE_ABBR : '' }} {{ isset($selected[0]) ? $selected[0]->COURSE_NAME : '' }}
+                            @endif
+                        </td>
+                        <td>{{ $adviser->VIEW_TERM }} {{ $adviser->VIEW_YEAR }}</td>
+                        @if ($adviser->VIEW_MODE == 0)
+                            @if (isset($selected[0]))
+                                @if (!isset($selected[0]->APPROVED_AT))
+                                <td align="center"><input type="checkbox" name="approve[]" value={{ isset($selected[0]) ? $selected[0]->COURSE_ABBR : ''}}></td>
+                                @else
+                                <td></td>
+                                @endif
+                                <td align="center"><input type="checkbox" name="completed[]" value={{ isset($selected[0]) ? $selected[0]->COURSE_ABBR : ''}}></td>
+                            @else
+                            <td></td><td></td>
+                            @endif
+                        @endif
                         <td><textarea name="adviserNote1"></textarea></td>
                     </tr>
 
                 <!-- Course 2 -->
                     <tr>
+                        @if($adviser->VIEW_MODE == 0)
                         <td>
-                            <select name="Course2">
-                                <option value="" selected></option>
-                                    
-                                    @foreach ($remainingCourses as $key=>$value)
-                                        <option value="{{ $value }}" {{ (isset($selected[1]) && $selected[1]->COURSE_ABBR == $value) ? 'selected' : '' }}>
-                                            {{ $value }} {{ $key }}
-                                        </option>
-                                    @endforeach
-                            </select>
+                            @if(isset($selected[1]))
+                                @if(isset($selected[1]->APPROVED_AT))
+                                    Approved
+                                @else
+                                    Pending Approval
+                                @endif
+                            @endif
                         </td>
-                        <td>{{ $viewTerm }} {{ $viewYear }}</td>
-                        <td align="center"><input type="checkbox" name="approve[]" value=""></td>
-                        <td align="center"><input type="checkbox" name="completed[]" value=""></td>
+                        @endif
+                        <td>
+                            @if ($adviser->VIEW_MODE == 1)
+                                <select name="Course2">
+                                    <option value="" selected></option>
+                                        @foreach ($remainingCourses as $key=>$value)
+                                            <option value="{{ $value }}" {{ (isset($selected[1]) && $selected[1]->COURSE_ABBR == $value) ? 'selected' : '' }}>
+                                                {{ $value }} {{ $key }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                            @else
+                                {{ isset($selected[1]) ? $selected[1]->COURSE_ABBR : '' }} {{ isset($selected[1]) ? $selected[1]->COURSE_NAME : '' }}
+                            @endif
+                        </td>
+                        <td>{{ $adviser->VIEW_TERM }} {{ $adviser->VIEW_YEAR }}</td>
+                        @if ($adviser->VIEW_MODE == 0)
+                            @if (isset($selected[1]))
+                                @if (!isset($selected[1]->APPROVED_AT))
+                                <td align="center"><input type="checkbox" name="approve[]" value={{ isset($selected[1]) ? $selected[1]->COURSE_ABBR : ''}}></td>
+                                @else
+                                <td></td>
+                                @endif
+                                <td align="center"><input type="checkbox" name="completed[]" value={{ isset($selected[1]) ? $selected[1]->COURSE_ABBR : ''}}></td>
+                            @else
+                            <td></td><td></td>
+                            @endif
+                        @endif
                         <td><textarea name="adviserNote2"></textarea></td>
                     </tr>
 
                 <!-- Course 3 -->
                     <tr>
+                        @if($adviser->VIEW_MODE == 0)
                         <td>
-                            <select name="Course3">
-                                <option value="" selected></option>
-                                    
-                                    @foreach ($remainingCourses as $key=>$value)
-                                        <option value="{{ $value }}" {{ (isset($selected[2]) && $selected[2]->COURSE_ABBR == $value) ? 'selected' : '' }}>
-                                            {{ $value }} {{ $key }}
-                                        </option>
-                                    @endforeach
-                            </select>
+                            @if(isset($selected[2]))
+                                @if(isset($selected[2]->APPROVED_AT))
+                                    Approved
+                                @else
+                                    Pending Approval
+                                @endif
+                            @endif
                         </td>
-                        <td>{{ $viewTerm }} {{ $viewYear }}</td>
-                        <td align="center"><input type="checkbox" name="approve[]" value=""></td>
-                        <td align="center"><input type="checkbox" name="completed[]" value=""></td>
+                        @endif
+                        <td>
+                            @if ($adviser->VIEW_MODE == 1)
+                                <select name="Course3">
+                                    <option value="" selected></option>
+                                        @foreach ($remainingCourses as $key=>$value)
+                                            <option value="{{ $value }}" {{ (isset($selected[2]) && $selected[2]->COURSE_ABBR == $value) ? 'selected' : '' }}>
+                                                {{ $value }} {{ $key }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                            @else
+                                {{ isset($selected[2]) ? $selected[2]->COURSE_ABBR : '' }} {{ isset($selected[2]) ? $selected[2]->COURSE_NAME : '' }}
+                            @endif
+                        </td>
+                        <td>{{ $adviser->VIEW_TERM }} {{ $adviser->VIEW_YEAR }}</td>
+                        @if ($adviser->VIEW_MODE == 0)
+                            @if (isset($selected[2]))
+                                @if (!isset($selected[2]->APPROVED_AT))
+                                <td align="center"><input type="checkbox" name="approve[]" value={{ isset($selected[2]) ? $selected[2]->COURSE_ABBR : ''}}></td>
+                                @else
+                                <td></td>
+                                @endif
+                                <td align="center"><input type="checkbox" name="completed[]" value={{ isset($selected[2]) ? $selected[2]->COURSE_ABBR : ''}}></td>
+                            @else
+                            <td></td><td></td>
+                            @endif
+                        @endif
                         <td><textarea name="adviserNote3"></textarea></td>
                     </tr>
 
                 <!-- Course 4 -->
                     <tr>
+                        @if($adviser->VIEW_MODE == 0)
                         <td>
-                            <select name="Course4">
-                                <option value="" selected></option>
-                                    
-                                    @foreach ($remainingCourses as $key=>$value)
-                                        <option value="{{ $value }}" {{ (isset($selected[3]) && $selected[3]->COURSE_ABBR == $value) ? 'selected' : '' }}>
-                                            {{ $value }} {{ $key }}
-                                        </option>
-                                    @endforeach
-                            </select>
+                            @if(isset($selected[3]))
+                                @if(isset($selected[3]->APPROVED_AT))
+                                    Approved
+                                @else
+                                    Pending Approval
+                                @endif
+                            @endif
                         </td>
-                        <td>{{ $viewTerm }} {{ $viewYear }}</td>
-                        <td align="center"><input type="checkbox" name="approve[]" value=""></td>
-                        <td align="center"><input type="checkbox" name="completed[]" value=""></td>
+                        @endif
+                        <td>
+                            @if ($adviser->VIEW_MODE == 1)
+                                <select name="Course4">
+                                    <option value="" selected></option>
+                                        @foreach ($remainingCourses as $key=>$value)
+                                            <option value="{{ $value }}" {{ (isset($selected[3]) && $selected[3]->COURSE_ABBR == $value) ? 'selected' : '' }}>
+                                                {{ $value }} {{ $key }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                            @else
+                                {{ isset($selected[3]) ? $selected[3]->COURSE_ABBR : '' }} {{ isset($selected[3]) ? $selected[3]->COURSE_NAME : '' }}
+                            @endif
+                        </td>
+                        <td>{{ $adviser->VIEW_TERM }} {{ $adviser->VIEW_YEAR }}</td>
+                        @if ($adviser->VIEW_MODE == 0)
+                            @if (isset($selected[3]))
+                                @if (!isset($selected[3]->APPROVED_AT))
+                                <td align="center"><input type="checkbox" name="approve[]" value={{ isset($selected[3]) ? $selected[3]->COURSE_ABBR : ''}}></td>
+                                @else
+                                <td></td>
+                                @endif
+                            <td align="center"><input type="checkbox" name="approve[]" value={{ isset($selected[3]) ? $selected[3]->COURSE_ABBR : ''}}></td>
+                            @else
+                            <td></td><td></td>
+                            @endif
+                        @endif
                         <td><textarea name="adviserNote4"></textarea></td>
                     </tr>
 
                 <!-- Course 5 -->
                     <tr>
+                        @if($adviser->VIEW_MODE == 0)
                         <td>
-                            <select name="Course5">
-                                <option value="" selected></option>
-                                    
-                                    @foreach ($remainingCourses as $key=>$value)
-                                        <option value="{{ $value }}" {{ (isset($selected[4]) && $selected[4]->COURSE_ABBR == $value) ? 'selected' : '' }}>
-                                            {{ $value }} {{ $key }}
-                                        </option>
-                                    @endforeach
-                            </select>
+                            @if(isset($selected[4]))
+                                @if(isset($selected[4]->APPROVED_AT))
+                                    Approved
+                                @else
+                                    Pending Approval
+                                @endif
+                            @endif
                         </td>
-                        <td>{{ $viewTerm }} {{ $viewYear }}</td>
-                        <td align="center"><input type="checkbox" name="approve[]" value=""></td>
-                        <td align="center"><input type="checkbox" name="completed[]" value=""></td>
+                        @endif
+                        <td>
+                            @if ($adviser->VIEW_MODE == 1)
+                                <select name="Course5">
+                                    <option value="" selected></option>
+                                        @foreach ($remainingCourses as $key=>$value)
+                                            <option value="{{ $value }}" {{ (isset($selected[4]) && $selected[4]->COURSE_ABBR == $value) ? 'selected' : '' }}>
+                                                {{ $value }} {{ $key }}
+                                            </option>
+                                        @endforeach
+                                </select>
+                            @else
+                                {{ isset($selected[4]) ? $selected[4]->COURSE_ABBR : '' }} {{ isset($selected[4]) ? $selected[4]->COURSE_NAME : '' }}
+                            @endif
+                        </td>
+                        <td>{{ $adviser->VIEW_TERM }} {{ $adviser->VIEW_YEAR }}</td>
+                        @if ($adviser->VIEW_MODE == 0)
+                            @if (isset($selected[4]))
+                                @if (!isset($selected[4]->APPROVED_AT))
+                                <td align="center"><input type="checkbox" name="approve[]" value={{ isset($selected[4]) ? $selected[4]->COURSE_ABBR : ''}}></td>
+                                @else
+                                <td></td>
+                                @endif
+                            <td align="center"><input type="checkbox" name="completed[]" value={{ isset($selected[4]) ? $selected[4]->COURSE_ABBR : ''}}></td>
+                            @else
+                            <td></td><td></td>
+                            @endif
+                        @endif
                         <td><textarea name="adviserNote5"></textarea></td>
                     </tr>
             </table>
-        @endif
+        
         <br>
-        <input type="submit" name="Approve" value="Approve Selected Courses"></input>
+            @if ($adviser->VIEW_MODE == 0)
+                <input type="submit" name="Modify" value="Modify Selected Courses"/> <input type="submit" name="Approve" value="Approve Selected Courses"/>
+                <br><br>
+                <input type="submit" name="Complete" value="Complete Adviser Meeting"/>
+            @else
+                <input type="submit" name="GoBack" value="Go Back"></input> <input type="submit" name="SubmitChanges" value="Submit Changes"/>
+            @endif
+        @endif 
     </form>    
 </div>
 <div class="adviserNotes">
@@ -215,7 +356,7 @@
     
     <h4>Completed Courses</h4>
         @foreach ($completed as $c)
-            <li>{{ $c->COURSE_ABBR }} {{ $c->COURSE_NAME }}</li>
+            <li>{{ $c->COURSE_ABBR }} {{ $c->COURSE_NAME }} ({{ $c->TERM }} {{ $c->YEAR }})</li>
         @endforeach
 
 
