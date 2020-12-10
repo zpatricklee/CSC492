@@ -120,7 +120,7 @@ class AdviserController extends Controller
         request()->validate([
             'FirstName' => ['required'],
             'LastName' => ['required'],
-            'Email' => ['required', 'email'],
+            'Email' => ['required', 'regex:/^[[:alnum:]]+@toromail.csudh.edu$/'],
             'Department' => ['required'],
             'Office' => ['required'],
             'Password' => ['required']

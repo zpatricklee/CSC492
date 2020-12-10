@@ -137,7 +137,7 @@ class StudentController extends Controller
             'FirstName' => ['required'],
             'LastName' => ['required'],
             'StudentID' => ['required', 'digits:9'],
-            'Email' => ['required', 'email'],
+            'Email' => ['required', 'regex:/^[[:alnum:]]+@toromail.csudh.edu$/'],
             'Password' => ['required']
         ]);
 
