@@ -1,5 +1,5 @@
 # ONLINE ADVISING DATABASE
-CSU Dominguez Hills CSC 492 Final Project by Patrick Lee and Jose Gonzalez
+CSU Dominguez Hills CSC 492 Senior Design Final Project by Patrick Lee and Jose Gonzalez
 
 ## Installation and Setup
 1. Download and Install [Composer](https://getcomposer.org/download)
