@@ -26,8 +26,15 @@
 <!-- Laravel's security out of the box -->
 {{ csrf_field() }}
 
-    <DIV class="login-container">   
+    <DIV class="login-container">  
         <TABLE CLASS="center">
+            <th></th><th style="font-size: 200%">SIGN-IN</th>
+            <tr>
+                <td></td><td></td>
+            </tr>
+            <tr>
+                <td></td><td></td>
+            </tr>
             <TR>
                 <TD ALIGN="right">Email:</TD>
                 <TD><INPUT TYPE="TEXT" NAME="Email" MAXLENGTH="30" SIZE="30" VALUE="" STYLE="background-color: #F5F5F5"></TD>

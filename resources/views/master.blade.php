@@ -6,10 +6,13 @@
         a {
             text-decoration: none;
         }
-        html, body{
-            height: 100%
+        html, body {
+            background-color: #fff;
+            color: #636b6f;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 200;
+            margin: 0;
         }
-
         .header-container {
             width: 100%;
             background-color: #800000;
@@ -37,11 +40,11 @@
             margin-right: auto;
         }
         .login-container {
-            display: flex;
+            //display: flex;
             justify-content: center;
             align-items: center; 
-            height: 20%; 
-            border: 1px solid gray;   /*REMOVE THIS LATER*/
+            height: 30%; 
+            text-align: center;
         }
         .center {
             margin-left: auto;
@@ -82,7 +85,7 @@
             width: 7%;
             font-weight: bold;
             float: right;
-            border-style: solid;
+            //border-style: solid;
         }
 
         .Topbar {
@@ -90,7 +93,7 @@
             text-indent: 7%;
             width: 100%;
             text-align: center;
-            border-style: solid;
+            //border-style: solid;
         }
     </STYLE>
     </HEAD>

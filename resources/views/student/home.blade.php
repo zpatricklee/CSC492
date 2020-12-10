@@ -16,45 +16,19 @@
                 height: 100vh;
                 margin: 0;
             }
-
-            .MainContent {
-                font-size: 25px;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                width: 74%;
-                float: left;
+            .flex-container{
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                flex-wrap: wrap;
+                font-size: 130%;
                 text-align: center;
-                height: 40%;
-
-                border: 1px solid red;
             }
-
-            .AdvisorNotes {
-                font-size: 25px;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                width: 25%;
-                float: right;
-                text-align: center;
-                height: 40%;
-
-                border: 1px solid blue;
-            }
-
-            .Courses {
-                font-size: 25px;
-                text-align: center;
-                width: 100%;
-
-                border: 1px solid green;
-            }
-
             .CompletedCourse {
                 font-size: 25px;
                 text-align: center;
                 width: 100%;
-
-                border: 1px solid pink;
+                font-size: 130%;
             }
 
             option{
@@ -88,109 +62,112 @@
             </div>
         @endif
 
-        <div class="MainContent">
-        <h4> <center>Preferred Courses</center></h4>
-        <form action="" method="post">
+        <div class="flex-container">
+            <div style="flex-grow: 1; text-align: center">
+            <form action="" method="post">
 
-        <!-- Laravel's security out of the box -->
-        {{ csrf_field() }}
+            <!-- Laravel's security out of the box -->
+            {{ csrf_field() }}
 
-        Term: 
-        <select name="Term">
-            <option></option>
-            @foreach ($terms as $term)
-                <option value="{{ $term->TERM_NAME }}">{{ $term->TERM_NAME }}</option>
-            @endforeach
-        </select>
-        <select name="Year">
-            <option></option>
-            <option value="{{ date('Y') }}">{{ date('Y') }}</option>
-            <option value="{{ date('Y')+1 }}">{{ date('Y')+1 }}</option>
-        </select>
-        
-        <br>
-        Course: 
-        <select name="Course1">
-            <option></option>
-            @foreach ($remainingCourses as $key=>$value)
-                <option value="{{ $key }}" {{ old('Course1') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
-            @endforeach
-        </select>
-        <br>
-        Course:
-        <select name="Course2">
-            <option></option>
-            @foreach ($remainingCourses as $key=>$value)
-                <option value="{{ $key }}" {{ old('Course2') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
-            @endforeach
-        </select>
-        <br>
-        Course:
-        <select name="Course3">
-            <option></option>
-            @foreach ($remainingCourses as $key=>$value)
-                <option value="{{ $key }}" {{ old('Course3') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
-            @endforeach
-        </select>
-        <br>
-        Course:
-        <select name="Course4">
-            <option></option>
-            @foreach ($remainingCourses as $key=>$value)
-                <option value="{{ $key }}" {{ old('Course4') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
-            @endforeach
-        </select>
-        <br>
-        Course:
-        <select name="Course5">
-            <option></option>
-            @foreach ($remainingCourses as $key=>$value)
-                <option value="{{ $key }}" {{ old('Course5') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
-            @endforeach
-        </select>
-        <br><br>
-        <input type="submit" name="Submit" value="Submit Courses for Approval">
-        </form>
-        </div>
+                <h4 align="center">Courses Pending Approval</h4>
+                @if ($selectedCourses != NULL)
+                    <table align="center" border="true" style="border: 1px solid black; border-collapse: collapse">
+                    <th style="padding: 5px">SELECT</th>
+                    <th style="padding: 5px">COURSE</th>
+                    <th style="padding: 5px">TERM</th>
+                    @foreach ($selectedCourses as $s)
+                        <tr>
+                            <td align="center"><input type="checkbox" name="removeSelected[]" value="{{ $s->COURSE_ABBR }}"></td><td style="padding: 5px">{{ $s->COURSE_ABBR }} {{ $s->COURSE_NAME }}</td><td style="padding: 5px">{{ $s->TERM }} {{ $s->YEAR }}</td></input>
+                        </tr>
+                    @endforeach
+                    </table>
+                @endif
+                <br><input type="submit" name="Remove Selected Courses" value="Remove Selected Courses">
+            </form>
+            </div>
 
-        <div class="AdvisorNotes">
-            <h4>Advisor Notes</h4>
+            <div style="flex-grow: 1; text-align: center">
+                <h4> <center>Preferred Courses</center></h4>
+                <form action="" method="post">
+
+                <!-- Laravel's security out of the box -->
+                {{ csrf_field() }}
+
+                Term: 
+                <select name="Term">
+                    <option></option>
+                    @foreach ($terms as $term)
+                        <option value="{{ $term->TERM_NAME }}">{{ $term->TERM_NAME }}</option>
+                    @endforeach
+                </select>
+                <select name="Year">
+                    <option></option>
+                    <option value="{{ date('Y') }}">{{ date('Y') }}</option>
+                    <option value="{{ date('Y')+1 }}">{{ date('Y')+1 }}</option>
+                </select>
                 
-        </div>
-
-        <div class="Selected Courses">
-        <form action="" method="post">
-
-        <!-- Laravel's security out of the box -->
-        {{ csrf_field() }}
-
-            <h4>Courses Pending Approval</h4>
-            @if ($selectedCourses != NULL)
-                <table align="center" border="true" style="border: 1px solid black; border-collapse: collapse">
-                <th align="left" style="padding: 5px">SELECT</th>
-                <th align="left" style="padding: 5px">COURSE ABBR.</th>
-                <th align="left" style="padding: 5px">COURSE NAME</th>
-                <th align="left" style="padding: 5px">TERM</th>
-                @foreach ($selectedCourses as $s)
-                    <tr>
-                        <td align="center"><input type="checkbox" name="removeSelected[]" value="{{ $s->COURSE_ABBR }}"></td><td style="padding: 5px">{{ $s->COURSE_ABBR }}</td><td style="padding: 5px">{{ $s->COURSE_NAME }}</td><td style="padding: 5px">{{ $s->TERM }} {{ $s->YEAR }}</td></input>
-                    </tr>
-                @endforeach
-                </table>
-            @endif
-            <br><input type="submit" name="Remove Selected Courses" value="Remove Selected Courses">
-        </form>
+                <br><br>
+                Course: 
+                <select name="Course1">
+                    <option></option>
+                    @foreach ($remainingCourses as $key=>$value)
+                        <option value="{{ $key }}" {{ old('Course1') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+                    @endforeach
+                </select>
+                <br>
+                Course:
+                <select name="Course2">
+                    <option></option>
+                    @foreach ($remainingCourses as $key=>$value)
+                        <option value="{{ $key }}" {{ old('Course2') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+                    @endforeach
+                </select>
+                <br>
+                Course:
+                <select name="Course3">
+                    <option></option>
+                    @foreach ($remainingCourses as $key=>$value)
+                        <option value="{{ $key }}" {{ old('Course3') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+                    @endforeach
+                </select>
+                <br>
+                Course:
+                <select name="Course4">
+                    <option></option>
+                    @foreach ($remainingCourses as $key=>$value)
+                        <option value="{{ $key }}" {{ old('Course4') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+                    @endforeach
+                </select>
+                <br>
+                Course:
+                <select name="Course5">
+                    <option></option>
+                    @foreach ($remainingCourses as $key=>$value)
+                        <option value="{{ $key }}" {{ old('Course5') == $key ? 'selected' : '' }}>{{ $key }} {{ $value }}</option>
+                    @endforeach
+                </select>
+                <br><br>
+                <input type="submit" name="Submit" value="Submit Courses for Approval">
+            </form>
+            </div>
+            
+            <div style="flex-grow: 2">
+                <h4>Advisor Notes</h4>
+                {{ isset($note->NOTE) ? $note->NOTE : '' }}
+            </div> 
+            <div style="flex-grow: 2">
+            </div>       
         </div>
 
         <div class="CompletedCourse">
             <h4>Completed Courses</h4>
             @if ($completedCourses != NULL)
                 <table align="center" border="true" style="border: 1px solid black; border-collapse: collapse">
-                <th align="left" style="padding: 5px">COURSE ABBR.</th>
-                <th align="left" style="padding: 5px">COURSE NAME</th>
-                @foreach ($completedCourses as $key=>$value)
+                <th style="padding: 5px">COURSE</th>
+                <th style="padding: 5px">TERM</th>
+                @foreach ($completedCourses as $cc)
                     <tr>
-                        <td>{{ $key }}</td><td>{{ $value }}</td>
+                        <td>{{ $cc->COURSE_ABBR }} {{ $cc->COURSE_NAME }}</td><td>{{ $cc->TERM }} {{ $cc->YEAR }}</td>
                     </tr>
                 @endforeach
                 </table>

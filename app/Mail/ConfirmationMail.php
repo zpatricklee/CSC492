@@ -31,8 +31,7 @@ class ConfirmationMail extends Mailable
      */
     public function build()
     {
-        return $this->from('onlineadvising@csudh.edu', 'CSUDH Online Advising')
-                    ->subject('[CSUDH Online Advising] Please verify your email address')
+        return $this->subject('[CSUDH Online Advising] Please verify your email address')
                     ->view('emails.confirmation');
     }
 }

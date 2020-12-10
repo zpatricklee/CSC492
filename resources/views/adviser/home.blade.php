@@ -4,7 +4,6 @@
 
 <style>
     .top-bar {
-        border-style: solid;
         font-size: 40px;
         width: 100%;
         text-indent: 7%;
@@ -48,7 +47,8 @@
 {{ csrf_field() }}
 
     <div class="login-container">
-        <table>
+        <br><br>
+        <table align="center">
             <tr>
                 <td align="right">Student ID:</td>
                 <td>

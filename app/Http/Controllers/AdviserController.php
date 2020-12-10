@@ -8,6 +8,7 @@ use App\VerifiedAdviser;
 use App\UnverifiedAdviser;
 use App\VerifiedStudent;
 use App\A_Session;
+use App\AdviserNotes;
 use App\CompletedCourses;
 use App\SelectedCourse;
 use App\Terms;
@@ -156,9 +157,9 @@ class AdviserController extends Controller
                 'LAST_NAME' => request('LastName'),
                 'SUFFIX' => request('Suffix'),
                 'EMAIL' => request('Email'),
-                'DEPARTMENT' => request('DEPARTMENT'),
-                'OFFICE' => request('OFFICE'),
-                'HASH_PW' => Hash::make($unverified_pw),
+                'DEPARTMENT' => request('Department'),
+                'OFFICE' => request('Office'),
+                'HASH_PW' => Hash::make(request('Password')),
                 'CREATED' => Carbon::now(),
                 'UPDATED' => Carbon::now(),
                 'VERIFICATION_TOKEN' => $verificationToken
@@ -296,6 +297,7 @@ class AdviserController extends Controller
         $student_id = $adviser->SID_REQUEST;
         $viewTerm = $adviser->VIEW_TERM;
         $viewYear = $adviser->VIEW_YEAR;
+        $note = AdviserNotes::where('STUDENT_ID', $student_id)->first();
 
         $selectedCourses = SelectedCourse::where('STUDENT_ID', $student_id)->where('TERM', $viewTerm)
                             ->where('YEAR', $viewYear)->orderBy('COURSE_ABBR')->get();
@@ -311,7 +313,8 @@ class AdviserController extends Controller
 
         return view('adviser.viewStudent')->with('selected', $selectedCourses)
                 ->with('completed', $completedCourses)->with('terms', $terms)
-                ->with('remainingCourses', $remainingCourses)->with('adviser', $adviser);
+                ->with('remainingCourses', $remainingCourses)->with('adviser', $adviser)
+                ->with('note', $note);
     }
 
     /*****************
@@ -323,6 +326,14 @@ class AdviserController extends Controller
      *****************/
     public function storeViewStudent(Request $request){
         $adviser = Auth::guard('adviser')->user();
+
+        // Update adviser note
+        $note = AdviserNotes::updateOrCreate([
+            'STUDENT_ID' => $adviser->SID_REQUEST
+        ]);
+        $note->NOTE = $request->input('AdviserNote');
+        $note->UPDATED = Carbon::now();
+        $note->save();
 
         if($request->input('SubmitTerm') != null){
             request()->validate([
@@ -390,11 +401,18 @@ class AdviserController extends Controller
                                             ->where('TERM', $adviser->VIEW_TERM)
                                             ->where('YEAR', $adviser->VIEW_YEAR)
                                             ->orderBy('APPROVED_AT', 'asc')->get();
-            
-
 
             // If student is not taking any courses for the upcoming semester
-            if(empty($studentCourses) || $studentCourses[0]->APPROVED_AT != null){
+            if(!isset($studentCourses)){
+                $student = VerifiedStudent::where('SID', $adviser->SID_REQUEST)->first();
+                $student->REMOVE_HOLD_FOR = $adviser->VIEW_TERM . " " . $adviser->VIEW_YEAR;
+                $student->LAST_MEETING = Carbon::now();
+                $student->save();
+
+                return redirect('/adviser/home');
+            }
+            // Make sure all courses have been approved
+            else if($studentCourses[0]->APPROVED_AT != null){
                 $student = VerifiedStudent::where('SID', $adviser->SID_REQUEST)->first();
                 $student->REMOVE_HOLD_FOR = $adviser->VIEW_TERM . " " . $adviser->VIEW_YEAR;
                 $student->LAST_MEETING = Carbon::now();

@@ -41,17 +41,17 @@
         float: right;
         text-align: left;
         height: 60%;
-        background-color: #fff824;
+        //background-color: #fff824;
     }
     .selectedCourses {
         font-size: 25px;
         text-align: center;
         float: left;
-        width: 75%;
+        width: 100%;
         height: 60%;
-        background-color: #4cff24;
+        //background-color: #4cff24;
     }
-    .completedCourses {
+    .completed-courses {
         font-size: 25px;
         text-align: center;
         width: 100%;
@@ -163,7 +163,7 @@
                             <td></td><td></td>
                             @endif
                         @endif
-                        <td><textarea name="adviserNote1"></textarea></td>
+                        <td rowspan="5"><textarea name="AdviserNote" rows="9" cols="30">{{ isset($note->NOTE) ? $note->NOTE : ''}}</textarea></td>
                     </tr>
 
                 <!-- Course 2 -->
@@ -206,7 +206,6 @@
                             <td></td><td></td>
                             @endif
                         @endif
-                        <td><textarea name="adviserNote2"></textarea></td>
                     </tr>
 
                 <!-- Course 3 -->
@@ -249,7 +248,6 @@
                             <td></td><td></td>
                             @endif
                         @endif
-                        <td><textarea name="adviserNote3"></textarea></td>
                     </tr>
 
                 <!-- Course 4 -->
@@ -292,7 +290,6 @@
                             <td></td><td></td>
                             @endif
                         @endif
-                        <td><textarea name="adviserNote4"></textarea></td>
                     </tr>
 
                 <!-- Course 5 -->
@@ -335,7 +332,6 @@
                             <td></td><td></td>
                             @endif
                         @endif
-                        <td><textarea name="adviserNote5"></textarea></td>
                     </tr>
             </table>
         
@@ -343,21 +339,27 @@
             @if ($adviser->VIEW_MODE == 0)
                 <input type="submit" name="Modify" value="Modify Selected Courses"/> <input type="submit" name="Approve" value="Approve Selected Courses"/>
                 <br><br>
-                <input type="submit" name="Complete" value="Complete Adviser Meeting"/>
+                <input type="submit" name="Complete" value="Complete Adviser Meeting for Selected Term"/>
             @else
                 <input type="submit" name="GoBack" value="Go Back"></input> <input type="submit" name="SubmitChanges" value="Submit Changes"/>
             @endif
+        @else
+            <h4>Adviser Notes</h4>
+            <textarea name="AdviserNote" rows="9" cols="30">{{ isset($note->NOTE) ? $note->NOTE : ''}}</textarea>
         @endif 
     </form>    
 </div>
-<div class="adviserNotes">
-    test
-</div>
-    
+<div class="completed-courses">
     <h4>Completed Courses</h4>
-        @foreach ($completed as $c)
-            <li>{{ $c->COURSE_ABBR }} {{ $c->COURSE_NAME }} ({{ $c->TERM }} {{ $c->YEAR }})</li>
-        @endforeach
-
+        <table align="center">
+            <th>COURSE</th>
+            <th>TERM</th>
+            @foreach ($completed as $c)
+                <tr>
+                    <td>{{ $c->COURSE_ABBR }} {{ $c->COURSE_NAME }}</td><td>{{ $c->TERM }} {{ $c->YEAR }}</td>
+                </tr>
+            @endforeach
+        </table>
+</div>
 
 @endsection

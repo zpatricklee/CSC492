@@ -9,6 +9,7 @@ use App\VerifiedAdviser;
 use App\UnverifiedStudent;
 use App\VerifiedStudent;
 use App\SelectedCourse;
+use App\AdviserNotes;
 use App\CompletedCourses;
 use App\Terms;
 use App\S_Session;
@@ -252,17 +253,21 @@ class StudentController extends Controller
      *****************/
     public function createHome(){
         $user = Auth::guard('student')->user();
+        $note = AdviserNotes::where('STUDENT_ID', $user->student_id)->first();
         $selectedCourses = SelectedCourse::where('STUDENT_ID', $user->student_id)
                             ->orderBy('YEAR', 'asc')->orderBy('TERM_ID', 'asc')->get();
+        $terms = Terms::all();
+        $completed = CompletedCourses::where('STUDENT_ID', $user->student_id)
+                                        ->orderBy('YEAR', 'asc')->orderBy('TERM_ID', 'asc')->get();
+        
         $allCourses = Course::select('COURSE_ABBR', 'COURSE_NAME')->pluck('COURSE_NAME', 'COURSE_ABBR');
         $completedCourses = CompletedCourses::select('COURSE_ABBR', 'COURSE_NAME')->where('STUDENT_ID', $user->student_id)
                             ->orderBy('COURSE_ABBR', 'asc')->pluck('COURSE_NAME', 'COURSE_ABBR');
-        $terms = Terms::all();
-
         $remainingCourses = $allCourses->diff($completedCourses); 
 
         return view('student.home')->with('user', $user)->with('selectedCourses', $selectedCourses)
-                ->with('remainingCourses', $remainingCourses)->with('terms', $terms)->with('completedCourses', $completedCourses);
+                ->with('remainingCourses', $remainingCourses)->with('terms', $terms)
+                ->with('completedCourses', $completed)->with('note', $note);
     }
 
     /*****************
